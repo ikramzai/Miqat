@@ -1,71 +1,34 @@
-# Online Service Booking Application
+# Maw3idi - Online Service Booking
 
-## 📌 Introduction
-
-### 📍 Context
-This project aims to develop a web application that allows users to book various services (doctors, hair salons, artisans, coaches, etc.). The goal is to simplify appointment scheduling and optimize the management of service providers' schedules.
-
-### 🎯 Project Objectives
-- Enable users to easily find and book services online.
-- Provide service providers with an efficient appointment management system.
-- Integrate an online payment system and appointment reminders.
-- Offer a smooth and intuitive user experience.
-
-## 🚀 Features
-
-### 👥 User Features
-- 🔹 Registration and authentication (email, Google, Facebook).
-- 🔹 Search and filter services (by location, price, availability, reviews).
-- 🔹 View service provider profiles (photos, description, reviews, availability).
-- 🔹 Book appointments with instant confirmation or manual approval.
-- 🔹 Online payment (Stripe, PayPal) and in-person payment.
-- 🔹 Manage appointments (modification, cancellation, history).
-- 🔹 Notifications and reminders (email, SMS, push).
-- 🔹 Review and rating system.
-
-### 🏢 Service Provider Features
-- 🔹 Registration and profile management.
-- 🔹 Availability and calendar management.
-- 🔹 Accept or decline appointments.
-- 🔹 View client history and earnings.
-- 🔹 Integration with Google Calendar.
-- 🔹 Payment management and fund withdrawals.
-
-### 🔧 Administrator Features
-- 🔹 Dashboard with statistics (number of bookings, revenue, active users).
-- 🔹 User and provider management (verification, suspension, deletion).
-- 🔹 Payment and commission management.
-- 🔹 Review monitoring and comment moderation.
-
-## 🛠️ Tech Stack
-- **Frontend**: React.js / Vue.js
-- **Backend**: Node.js with Express / Django with Python
-- **Database**: PostgreSQL / MongoDB
-- **Authentication**: JWT, OAuth (Google, Facebook)
-- **Hosting**: AWS, Firebase, or Vercel
-- **Payment**: Stripe, PayPal
-- **Notifications**: Firebase Cloud Messaging, Twilio (SMS)
-
-## 💰 Business Model
-- 💵 Commission on each confirmed booking.
-- 💎 Monthly subscription for premium providers.
-- 📢 Advertisements and promoted provider listings.
-
-## ✅ Constraints and Requirements
-- 🔹 Compliance with GDPR for data protection.
-- 🔹 High availability and scalability.
-- 🔹 Responsive and accessible interface.
-
-## 📅 Development Plan
-- **Phase 1**: Needs analysis and wireframe design.
-- **Phase 2**: MVP (Minimum Viable Product) development.
-- **Phase 3**: Testing and bug fixing.
-- **Phase 4**: Launch and performance monitoring.
-
-## 🎉 Conclusion
-This project aims to provide an innovative and efficient solution for online appointment management, ensuring a seamless experience for both users and service providers.
+Welcome to **Maw3idi**, a static prototype for an online service booking application. This project focuses on designing wireframes in **Figma** and developing a responsive frontend using **HTML** and **CSS**.
 
 ---
-### 📢 Want to contribute? 🤝
-Feel free to fork this repository, create a new branch, and submit a pull request! 🚀
 
+## **Features**
+- **Figma Wireframes**: Homepage, Service Provider Profile, Booking Confirmation, and User Dashboard.
+- **HTML/CSS Development**: Responsive design for mobile, tablet, and desktop.
+- **Reusable Components**: Buttons, cards, and navigation bars.
+
+---
+
+## **Wireframes**
+View the wireframes on Figma:  
+[Figma Wireframes Link](#) *( Figma link)*
+
+---
+
+## **Installation**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ikramzai/Maw3idi.git
+
+
+   File structure :
+   maw3idi/
+├── index.html                # Homepage
+├── provider.html             # Service Provider Profile
+├── booking.html              # Booking Confirmation
+├── dashboard.html            # User Dashboard
+├── styles/                   # CSS files
+├── images/                   # Images and icons
+└── README.md                 # Project documentation
