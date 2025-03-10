@@ -21,14 +21,20 @@ View the wireframes on Figma:
 1. Clone the repository:
    ```bash
    git clone https://github.com/ikramzai/Maw3idi.git
+Open index.html in your browser.
 
+File Structure
 
-   File structure :
-   maw3idi/
+maw3idi/
 ├── index.html                # Homepage
 ├── provider.html             # Service Provider Profile
 ├── booking.html              # Booking Confirmation
 ├── dashboard.html            # User Dashboard
 ├── styles/                   # CSS files
+│   ├── main.css              # Global styles
+│   ├── homepage.css          # Homepage-specific styles
+│   ├── provider.css          # Provider-specific styles
+│   ├── booking.css           # Booking-specific styles
+│   └── dashboard.css         # Dashboard-specific styles
 ├── images/                   # Images and icons
 └── README.md                 # Project documentation
