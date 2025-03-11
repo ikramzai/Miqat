@@ -1,6 +1,6 @@
-# Maw3idi - Online Service Booking
+# Miqat - Online Service Booking
 
-Welcome to **Maw3idi**, a static prototype for an online service booking application. This project focuses on designing wireframes in **Figma** and developing a responsive frontend using **HTML** and **CSS**.
+Welcome to **Miqat**, a static prototype for an online service booking application. This project focuses on designing wireframes in **Figma** and developing a responsive frontend using **HTML** and **CSS**.
 
 ---
 
@@ -20,12 +20,12 @@ View the wireframes on Figma:
 ## **Installation**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ikramzai/Maw3idi.git
+   git clone https://github.com/ikramzai/Miqat.git
 Open index.html in your browser.
 
 File Structure
 
-maw3idi/
+Miqat/
 ├── index.html                # Homepage
 ├── provider.html             # Service Provider Profile
 ├── booking.html              # Booking Confirmation
