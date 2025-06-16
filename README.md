@@ -63,28 +63,24 @@ git clone https://github.com/ikramzai/Miqat.git
 cd miqat
 2. Backend Setup
 bash
-Copy
-Edit
+Copy code
 cd backend
 npm install
 Create a .env file and add the following:
 
 ini
-Copy
-Edit
+Copy code
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 Start the server:
 
 bash
-Copy
-Edit
+Copy code
 npm run dev
 3. Frontend Setup
 bash
-Copy
-Edit
+Copy code
 cd ../frontend
 npm install
 npm start
@@ -93,8 +89,7 @@ The backend will run at http://localhost:5000
 
 📁 Project Structure
 arduino
-Copy
-Edit
+Copy code
 miqat/
 ├── backend/
 │   ├── controllers/
