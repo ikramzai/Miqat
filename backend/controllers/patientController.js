@@ -106,11 +106,15 @@ exports.updatePatientProfile = async (req, res) => {
 exports.deletePatient = async (req, res) => {
   try {
     const patient = await Patient.findById(req.user._id);
-    if (!patient) return res.status(404).json({ message: 'Patient not found' });
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
 
-    await patient.remove();
-    res.json({ message: 'Patient deleted' });
+    await patient.deleteOne(); // more explicit than remove()
+
+    res.json({ message: 'Patient deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Delete failed', error });
+    console.error('❌ Delete patient error:', error); // this will print in your terminal
+    res.status(500).json({ message: 'Delete failed', error: error.message });
   }
 };

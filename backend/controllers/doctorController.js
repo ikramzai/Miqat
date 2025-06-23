@@ -119,11 +119,17 @@ exports.getDoctorProfile = async (req, res) => {
 exports.deleteDoctor = async (req, res) => {
   try {
     const doctor = await Doctor.findById(req.user._id);
-    if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
 
-    await doctor.remove();
-    res.json({ message: 'Doctor deleted' });
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+
+    await Doctor.deleteOne({ _id: req.user._id }); // safer alternative to doctor.remove()
+
+    res.json({ message: 'Doctor deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Delete failed', error });
+    console.error('❌ Error deleting doctor:', error); // Log error to console
+    res.status(500).json({ message: 'Delete failed', error: error.message });
   }
 };
+
