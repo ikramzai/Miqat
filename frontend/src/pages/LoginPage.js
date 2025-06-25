@@ -1,48 +1,57 @@
+// src/pages/LoginPage.js
 import React, { useState } from 'react';
-import api from '../services/api';
+import { Form, Button, Container, Card } from 'react-bootstrap';
+import axios from 'axios';
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('doctor'); // or 'patient'
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = role === 'doctor' ? '/doctors/login' : '/patients/login';
-      const response = await api.post(endpoint, { email, password });
-      console.log('Login successful:', response.data);
-      alert(`Welcome ${response.data.user?.name || response.data.name}`);
-    } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
+      const res = await axios.post('/api/patients/login', { email, password });
+      console.log('Logged in:', res.data);
+      // Save token or navigate...
+    } catch (err) {
       alert('Login failed');
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Email</label>
-          <input type="email" className="form-control"
-                 value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div className="mb-3">
-          <label>Password</label>
-          <input type="password" className="form-control"
-                 value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </div>
-        <div className="mb-3">
-          <label>Role</label>
-          <select className="form-select" value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="doctor">Doctor</option>
-            <option value="patient">Patient</option>
-          </select>
-        </div>
-        <button className="btn btn-primary" type="submit">Login</button>
-      </form>
-    </div>
+    <Container className="mt-5 d-flex justify-content-center">
+      <Card style={{ width: '24rem' }} className="p-4 shadow">
+        <h3 className="text-center mb-4">Login</h3>
+        <Form onSubmit={handleLogin}>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formPassword" className="mt-3">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit" className="mt-4 w-100">
+            Login
+          </Button>
+        </Form>
+      </Card>
+    </Container>
   );
 };
 
