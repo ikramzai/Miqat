@@ -1,221 +1,190 @@
-// src/pages/SignupPage.js
-import React, { useState } from 'react';
-import { Form, Button, Container, Card, Alert, ToggleButton, ButtonGroup } from 'react-bootstrap';
-import { FaGoogle, FaFacebook } from 'react-icons/fa';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import doctorImage from "../assets/doctor-appointment.jpg";
 
 const SignupPage = () => {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    userType: 'patient' // 'patient' or 'doctor'
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    userType: "patient",
+    agreeTerms: false,
   });
-  const [errors, setErrors] = useState({});
-  const [apiError, setApiError] = useState('');
-  const navigate = useNavigate();
-
-  // Password strength validation
-  const validatePassword = (password) => {
-    const errors = [];
-    if (password.length < 8) errors.push("At least 8 characters");
-    if (!/[A-Z]/.test(password)) errors.push("At least one uppercase letter");
-    if (!/[a-z]/.test(password)) errors.push("At least one lowercase letter");
-    if (!/[0-9]/.test(password)) errors.push("At least one number");
-    if (!/[^A-Za-z0-9]/.test(password)) errors.push("At least one special character");
-    return errors;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Client-side validation
-    const validationErrors = {};
-    if (!form.name.trim()) validationErrors.name = "Name is required";
-    if (!form.email.trim()) validationErrors.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) validationErrors.email = "Invalid email format";
-    
-    const passwordErrors = validatePassword(form.password);
-    if (passwordErrors.length > 0) {
-      validationErrors.password = passwordErrors;
-    }
-    
-    if (form.password !== form.confirmPassword) {
-      validationErrors.confirmPassword = "Passwords don't match";
-    }
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    try {
-      const endpoint = form.userType === 'doctor' 
-        ? '/api/doctors/register' 
-        : '/api/patients/register';
-      
-      const res = await axios.post(endpoint, {
-        name: form.name,
-        email: form.email,
-        password: form.password
-      });
-      
-      console.log('Signed up:', res.data);
-      navigate('/dashboard');
-    } catch (err) {
-      setApiError(err.response?.data?.message || 'Signup failed');
-    }
-  };
-
-  const handleSocialLogin = (provider) => {
-    // Redirect to social auth endpoint
-    window.location.href = `/api/auth/${provider}`;
-  };
 
   return (
-    <Container className="mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <Card className="shadow-sm border-0">
-            <Card.Body className="p-4">
-              <h2 className="text-center mb-4" style={{ color: '#2c3e50' }}>Create an Account</h2>
-              
-              {apiError && <Alert variant="danger">{apiError}</Alert>}
+    <div className="container-fluid vh-100 g-0">
+      <div className="row h-100 g-0">
+        {/* Left Side - Medical Image */}
+        <div className="col-lg-6 d-none d-lg-flex">
+          <img
+            src={doctorImage}
+            alt="Doctor Appointment"
+            className="h-100 w-100 object-fit-cover"
+          />
+        </div>
 
-              {/* User Type Toggle */}
-              <div className="mb-4 text-center">
-                <ButtonGroup>
-                  <ToggleButton
-                    id="toggle-patient"
-                    type="radio"
-                    variant={form.userType === 'patient' ? 'primary' : 'outline-primary'}
-                    checked={form.userType === 'patient'}
-                    onChange={() => setForm({...form, userType: 'patient'})}
-                  >
-                    Patient
-                  </ToggleButton>
-                  <ToggleButton
-                    id="toggle-doctor"
-                    type="radio"
-                    variant={form.userType === 'doctor' ? 'primary' : 'outline-primary'}
-                    checked={form.userType === 'doctor'}
-                    onChange={() => setForm({...form, userType: 'doctor'})}
-                  >
-                    Doctor
-                  </ToggleButton>
-                </ButtonGroup>
+        {/* Right Side - Signup Form */}
+        <div
+          className="col-lg-6 d-flex align-items-center justify-content-center"
+          style={{ backgroundColor: "#f2f5ff" }}
+        >
+          <div className="w-100 p-4" style={{ maxWidth: "450px" }}>
+            <div className="bg-white p-4 rounded shadow-sm">
+              <div className="text-center mb-4">
+                <h2 className="h3 fw-bold" style={{ color: "#2a7de1" }}>
+                  Create Account
+                </h2>
+                <p className="text-muted">Join our healthcare network</p>
               </div>
 
-              {/* Social Login Buttons */}
-              <div className="mb-4">
-                <Button 
-                  variant="outline-danger" 
-                  className="w-100 mb-2"
-                  onClick={() => handleSocialLogin('google')}
-                >
-                  <FaGoogle className="me-2" /> Sign up with Google
-                </Button>
-                <Button 
-                  variant="outline-primary" 
-                  className="w-100"
-                  onClick={() => handleSocialLogin('facebook')}
-                >
-                  <FaFacebook className="me-2" /> Sign up with Facebook
-                </Button>
-              </div>
-
-              <div className="text-center text-muted mb-3">— OR —</div>
-
-              <Form onSubmit={handleSubmit} noValidate>
-                {/* Name */}
-                <Form.Group className="mb-3">
-                  <Form.Label>Full Name</Form.Label>
-                  <Form.Control
+              <div className="row g-2 mb-3">
+                <div className="col-md-6">
+                  <label htmlFor="firstName" className="form-label">
+                    First Name
+                  </label>
+                  <input
                     type="text"
-                    placeholder="John Doe"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    isInvalid={!!errors.name}
+                    className="form-control py-2"
+                    id="firstName"
+                    placeholder="John"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstName: e.target.value })
+                    }
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.name}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                {/* Email */}
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="example@email.com"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    isInvalid={!!errors.email}
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="lastName" className="form-label">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control py-2"
+                    id="lastName"
+                    placeholder="Doe"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastName: e.target.value })
+                    }
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.email}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                {/* Password */}
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Create a password"
-                    value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    isInvalid={!!errors.password}
-                    required
-                  />
-                  {errors.password && (
-                    <Form.Text className="text-danger">
-                      <small>
-                        Password must contain: {errors.password.join(', ')}
-                      </small>
-                    </Form.Text>
-                  )}
-                </Form.Group>
-
-                {/* Confirm Password */}
-                <Form.Group className="mb-4">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Re-enter your password"
-                    value={form.confirmPassword}
-                    onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-                    isInvalid={!!errors.confirmPassword}
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.confirmPassword}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                {/* Submit Button */}
-                <Button 
-                  variant="primary" 
-                  type="submit" 
-                  className="w-100 py-2"
-                  style={{ backgroundColor: '#3498db', border: 'none' }}
-                >
-                  Sign Up
-                </Button>
-              </Form>
-
-              <div className="text-center mt-3">
-                <p className="text-muted">Already have an account? <a href="/login" style={{ color: '#3498db' }}>Log In</a></p>
+                </div>
               </div>
-            </Card.Body>
-          </Card>
+
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control py-2"
+                  id="email"
+                  placeholder="user@example.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control py-2"
+                  id="password"
+                  placeholder="At least 8 characters"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="confirmPassword" className="form-label">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control py-2"
+                  id="confirmPassword"
+                  placeholder="Re-enter your password"
+                  value={formData.confirmPassword}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onChange={(e) =>
+                    setFormData({ ...formData, agreeTerms: e.target.checked })
+                  }
+                  required
+                />
+                <label className="form-check-label" htmlFor="agreeTerms">
+                  I agree to the{" "}
+                  <a href="/terms" style={{ color: "#2a7de1" }}>
+                    Terms
+                  </a>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="btn w-100 py-2 mb-3 text-white"
+                style={{ backgroundColor: "#2a7de1" }}
+              >
+                Create Account
+              </button>
+
+              <div className="d-flex align-items-center mb-3">
+                <hr className="flex-grow-1" />
+                <span className="px-3 text-muted">or</span>
+                <hr className="flex-grow-1" />
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-outline-secondary w-100 py-2 mb-3"
+              >
+                <FcGoogle className="me-2 mb-1" /> Continue with Google
+              </button>
+
+              <div className="text-center">
+                <p className="text-muted mb-0">
+                  Already have an account?{" "}
+                  <a
+                    href="/login"
+                    className="text-decoration-none fw-bold"
+                    style={{ color: "#2a7de1" }}
+                  >
+                    Log in
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 
