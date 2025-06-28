@@ -9,16 +9,12 @@ const {
   getPatientById,
   deletePatient
 } = require('../controllers/patientController');
-
 const { protect } = require('../middleware/authMiddleware');
 
-// Public Routes
 router.post('/register', registerPatient);
 router.post('/login', loginPatient);
 router.get('/', getAllPatients);
 router.get('/:id', getPatientById);
-
-// Protected Routes
 router.get('/profile/me', protect, getPatientProfile);
 router.put('/profile/me', protect, updatePatientProfile);
 router.delete('/profile/me', protect, deletePatient);

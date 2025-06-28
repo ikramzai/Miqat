@@ -12,22 +12,34 @@ const generateToken = (id) => {
 exports.registerPatient = async (req, res) => {
   const { name, email, password } = req.body;
 
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
   try {
     const exists = await Patient.findOne({ email });
-    if (exists) return res.status(400).json({ message: 'Patient already exists' });
+    if (exists) {
+      return res.status(400).json({ message: 'Patient already exists.' });
+    }
 
     const patient = await Patient.create({ name, email, password });
 
-    res.status(201).json({
+    if (!patient) {
+      return res.status(500).json({ message: 'Patient creation failed.' });
+    }
+
+    return res.status(201).json({
       _id: patient._id,
       name: patient.name,
       email: patient.email,
       token: generateToken(patient._id),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Registration failed', error });
+    console.error('❌ Error registering patient:', error.message);
+    return res.status(500).json({ message: 'Server error during registration.' });
   }
 };
+
 
 // Login Patient
 exports.loginPatient = async (req, res) => {

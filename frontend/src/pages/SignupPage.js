@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
 import doctorImage from "../assets/doctor-appointment.jpg";
 
 const SignupPage = () => {
@@ -9,9 +10,52 @@ const SignupPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    userType: "patient",
+    userType: "patient", // or 'doctor'
+    specialty: "", // only for doctors
     agreeTerms: false,
   });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (formData.password !== formData.confirmPassword) {
+      return setError("Passwords do not match.");
+    }
+
+    if (!formData.agreeTerms) {
+      return setError("You must agree to the terms.");
+    }
+
+    try {
+      const endpoint =
+        formData.userType === "doctor"
+          ? "/api/doctors/register"
+          : "/api/patients/register";
+
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        ...(formData.userType === "doctor" && {
+          specialty: formData.specialty || "General",
+        }),
+      };
+
+      const response = await axios.post(endpoint, payload);
+      setSuccess("Account created successfully!");
+      console.log("✅ Signup success:", response.data);
+    } catch (err) {
+      console.error("❌ Signup failed:", err.response?.data || err.message);
+      setError(
+        err.response?.data?.message || "An error occurred during signup."
+      );
+    }
+  };
 
   return (
     <div className="container-fluid vh-100 g-0">
@@ -30,13 +74,32 @@ const SignupPage = () => {
           className="col-lg-6 d-flex align-items-center justify-content-center"
           style={{ backgroundColor: "#f2f5ff" }}
         >
-          <div className="w-100 p-4" style={{ maxWidth: "450px" }}>
+          <form
+            onSubmit={handleSubmit}
+            className="w-100 p-4"
+            style={{ maxWidth: "450px" }}
+          >
             <div className="bg-white p-4 rounded shadow-sm">
               <div className="text-center mb-4">
                 <h2 className="h3 fw-bold" style={{ color: "#2a7de1" }}>
                   Create Account
                 </h2>
                 <p className="text-muted">Join our healthcare network</p>
+              </div>
+
+              {/* User Type Toggle */}
+              <div className="mb-3">
+                <label className="form-label">Register as:</label>
+                <select
+                  className="form-select"
+                  value={formData.userType}
+                  onChange={(e) =>
+                    setFormData({ ...formData, userType: e.target.value })
+                  }
+                >
+                  <option value="patient">Patient</option>
+                  <option value="doctor">Doctor</option>
+                </select>
               </div>
 
               <div className="row g-2 mb-3">
@@ -90,6 +153,26 @@ const SignupPage = () => {
                   required
                 />
               </div>
+
+              {/* Specialty Field for Doctors */}
+              {formData.userType === "doctor" && (
+                <div className="mb-3">
+                  <label htmlFor="specialty" className="form-label">
+                    Specialty
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control py-2"
+                    id="specialty"
+                    placeholder="e.g. Cardiologist"
+                    value={formData.specialty}
+                    onChange={(e) =>
+                      setFormData({ ...formData, specialty: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+              )}
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
@@ -147,6 +230,14 @@ const SignupPage = () => {
                 </label>
               </div>
 
+              {/* Error & Success Messages */}
+              {error && (
+                <div className="alert alert-danger py-2">{error}</div>
+              )}
+              {success && (
+                <div className="alert alert-success py-2">{success}</div>
+              )}
+
               <button
                 type="submit"
                 className="btn w-100 py-2 mb-3 text-white"
@@ -181,7 +272,7 @@ const SignupPage = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

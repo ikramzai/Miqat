@@ -6,23 +6,30 @@ import {
   FaClock, 
   FaStar, 
   FaRegStar,
-  FaHeartbeat,    // Cardiology (replaced FaHeart)
-  FaUserMd,       // Dermatology (replaced FaSkin)
-  FaChild,        // Pediatrics (replaced FaBaby)
-  FaHeadSideVirus,// Neurology (replaced FaBrain)
-  FaTooth,        // Dentistry
-  FaBone,         // Orthopedics
-  FaEye,          // Ophthalmology
-  FaFlask,        // Pathology
-  FaProcedures,   // Surgery
-  FaAllergies,    // Allergology
-  FaLungs,        // Pulmonology
-  FaSyringe,      // Immunology
-  FaFemale,       // Gynecology
-  FaTint,         // Urology
-  FaChartLine,    // Endocrinology
-  FaRadiation,    // Oncology
-  FaDeaf          // ENT
+  FaHeartbeat,
+  FaUserMd,
+  FaChild,
+  FaHeadSideVirus,
+  FaTooth,
+  FaBone,
+  FaEye,
+  FaFlask,
+  FaProcedures,
+  FaAllergies,
+  FaLungs,
+  FaSyringe,
+  FaFemale,
+  FaTint,
+  FaChartLine,
+  FaRadiation,
+  FaDeaf,
+  FaCheckCircle,
+  FaShieldAlt,
+  FaBell,
+  FaExchangeAlt,
+  FaPhone,
+  FaComments,
+  FaUserFriends
 } from 'react-icons/fa';
 
 const HomePage = () => {
@@ -80,6 +87,63 @@ const HomePage = () => {
       reviews: 156,
       distance: 3.1,
       image: '/images/doctor3.jpg'
+    }
+  ];
+
+  const features = [
+    {
+      icon: <FaCheckCircle size={40} />,
+      title: "Verified Doctors",
+      description: "All doctors are thoroughly vetted and certified"
+    },
+    {
+      icon: <FaCalendarAlt size={40} />,
+      title: "24/7 Booking",
+      description: "Book appointments anytime, anywhere"
+    },
+    {
+      icon: <FaShieldAlt size={40} />,
+      title: "Secure Payments",
+      description: "Your transactions are always protected"
+    },
+    {
+      icon: <FaBell size={40} />,
+      title: "Smart Reminders",
+      description: "Never miss an appointment again"
+    },
+    {
+      icon: <FaExchangeAlt size={40} />,
+      title: "Easy Rescheduling",
+      description: "Change appointments with one click"
+    },
+    {
+      icon: <FaComments size={40} />,
+      title: "Instant Support",
+      description: "24/7 customer service available"
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "John D.",
+      role: "Patient",
+      quote: "Found the perfect specialist in minutes!",
+      rating: 5,
+      image: "/images/patient1.jpg"
+    },
+    {
+      name: "Maria S.",
+      role: "Patient",
+      quote: "The booking process was incredibly smooth.",
+      rating: 4,
+      image: "/images/patient2.jpg"
+    },
+    {
+      name: "David K.",
+      role: "Patient",
+      quote: "Saved me hours of waiting at the clinic!",
+      rating: 5,
+      image: "/images/patient3.jpg"
     }
   ];
 
@@ -179,8 +243,7 @@ const HomePage = () => {
       <div className="container" style={{ 
         padding: '3rem 1rem', 
         maxWidth: '1200px', 
-        margin: '0 auto',
-        backgroundColor: lightBackground
+        margin: '0 auto'
       }}>
         {/* Specialties Section */}
         <section style={{ 
@@ -239,6 +302,60 @@ const HomePage = () => {
                   color: textDark,
                   fontWeight: '500'
                 }}>{specialty.name}</h3>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section style={{ 
+          marginBottom: '3rem',
+          backgroundColor: white,
+          padding: '3rem 2rem',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ 
+            marginBottom: '2rem', 
+            color: textDark,
+            fontWeight: '600'
+          }}>Why Choose Our Platform?</h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            marginTop: '2rem'
+          }}>
+            {features.map((feature, index) => (
+              <div 
+                key={index}
+                style={{
+                  padding: '1.5rem',
+                  borderRadius: '10px',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
+                  }
+                }}
+              >
+                <div style={{
+                  color: primaryColor,
+                  marginBottom: '1rem'
+                }}>
+                  {feature.icon}
+                </div>
+                <h3 style={{
+                  marginBottom: '0.8rem',
+                  color: textDark,
+                  fontWeight: '500'
+                }}>{feature.title}</h3>
+                <p style={{
+                  color: textMuted,
+                  lineHeight: '1.6'
+                }}>{feature.description}</p>
               </div>
             ))}
           </div>
@@ -405,6 +522,147 @@ const HomePage = () => {
                 }}>{step.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section style={{ 
+          marginBottom: '3rem',
+          backgroundColor: white,
+          padding: '3rem 2rem',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ 
+            marginBottom: '2rem', 
+            color: textDark,
+            fontWeight: '600'
+          }}>What Our Patients Say</h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            marginTop: '2rem'
+          }}>
+            {testimonials.map((testimonial, index) => (
+              <div 
+                key={index}
+                style={{
+                  backgroundColor: lightBackground,
+                  padding: '2rem',
+                  borderRadius: '10px',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
+                  }
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  backgroundImage: `url(${testimonial.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  margin: '0 auto 1.5rem',
+                  border: `3px solid ${primaryColor}`
+                }}></div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginBottom: '1rem'
+                }}>
+                  {[...Array(5)].map((_, i) => (
+                    i < testimonial.rating ? 
+                    <FaStar key={i} style={{ color: '#FFD700', margin: '0 2px' }} /> : 
+                    <FaRegStar key={i} style={{ color: '#FFD700', margin: '0 2px' }} />
+                  ))}
+                </div>
+                <p style={{
+                  fontStyle: 'italic',
+                  color: textMuted,
+                  marginBottom: '1.5rem',
+                  lineHeight: '1.6'
+                }}>"{testimonial.quote}"</p>
+                <h4 style={{
+                  marginBottom: '0.3rem',
+                  color: textDark,
+                  fontWeight: '500'
+                }}>{testimonial.name}</h4>
+                <p style={{
+                  color: primaryColor,
+                  fontSize: '0.9rem'
+                }}>{testimonial.role}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Final CTA Section */}
+        <section style={{ 
+          marginBottom: '3rem',
+          background: `linear-gradient(135deg, ${primaryColor} 0%, #1a5fb4 100%)`,
+          padding: '4rem 2rem',
+          borderRadius: '12px',
+          textAlign: 'center',
+          color: white
+        }}>
+          <h2 style={{ 
+            marginBottom: '1rem', 
+            fontWeight: '600',
+            fontSize: '2rem'
+          }}>Ready to Book Your Appointment?</h2>
+          <p style={{ 
+            marginBottom: '2rem',
+            fontSize: '1.1rem',
+            maxWidth: '600px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+          }}>
+            Join thousands of patients who found their perfect doctor through our platform
+          </p>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '1rem'
+          }}>
+            <button style={{
+              backgroundColor: white,
+              color: primaryColor,
+              border: 'none',
+              borderRadius: '50px',
+              padding: '12px 30px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 5px 15px rgba(0,0,0,0.2)'
+              }
+            }}>
+              Sign Up Now
+            </button>
+            <button style={{
+              backgroundColor: 'transparent',
+              color: white,
+              border: '2px solid white',
+              borderRadius: '50px',
+              padding: '12px 30px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}>
+              Browse Doctors
+            </button>
           </div>
         </section>
       </div>
