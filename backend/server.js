@@ -13,11 +13,13 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
+// Import routes (removed auth routes)
 const doctorRoutes = require('./routes/doctorRoutes');
 const patientRoutes = require('./routes/patientRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 
-app.use('/api/doctors', doctorRoutes);  // ✅ Corrected path
+// Mount routes (removed auth routes)
+app.use('/api/doctors', doctorRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/appointments', appointmentRoutes);
 

@@ -14,21 +14,27 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const endpoint =
-      formData.userType === "doctor"
-        ? "http://localhost:5000/api/doctor/login"
-        : "http://localhost:5000/api/patient/login";
-
     try {
-      const res = await axios.post(endpoint, formData);
+      const endpoint =
+        formData.userType === "doctor"
+          ? "http://localhost:5000/api/doctors/login"
+          : "http://localhost:5000/api/patients/login";
+
+      const res = await axios.post(endpoint, {
+        email: formData.email,
+        password: formData.password,
+      });
+
       localStorage.setItem("token", res.data.token);
       alert("Login successful");
 
-      // Redirect based on user type
+      localStorage.setItem("userType", formData.userType);
+
+      // Redirect to dashboard
       if (formData.userType === "doctor") {
-        navigate("/doctor-dashboard");
+        navigate("/doctor");
       } else {
-        navigate("/patient-dashboard");
+        navigate("/patient");
       }
     } catch (error) {
       console.error(error);
@@ -115,7 +121,7 @@ const LoginPage = () => {
 
               <div className="text-center">
                 <p className="text-muted mb-0">
-                  Don’t have an account?{" "}
+                  Don't have an account?{" "}
                   <a href="/signup" className="text-decoration-none fw-bold" style={{ color: "#2a7de1" }}>
                     Sign up
                   </a>

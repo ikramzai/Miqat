@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   FaSearch, 
   FaMapMarkerAlt, 
@@ -33,6 +33,10 @@ import {
 } from 'react-icons/fa';
 
 const HomePage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [location, setLocation] = useState('');
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   // Color scheme
   const primaryColor = '#2a7de1';
   const lightBackground = '#e8f4fc';
@@ -68,7 +72,7 @@ const HomePage = () => {
       rating: 4.8,
       reviews: 124,
       distance: 2.5,
-      image: '/images/doctor1.jpg'
+      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face'
     },
     {
       id: 2,
@@ -77,7 +81,7 @@ const HomePage = () => {
       rating: 4.9,
       reviews: 89,
       distance: 1.2,
-      image: '/images/doctor2.jpg'
+      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&crop=face'
     },
     {
       id: 3,
@@ -86,7 +90,7 @@ const HomePage = () => {
       rating: 4.7,
       reviews: 156,
       distance: 3.1,
-      image: '/images/doctor3.jpg'
+      image: 'https://images.unsplash.com/photo-1594824475317-7e2f8e8a4d21?w=300&h=300&fit=crop&crop=face'
     }
   ];
 
@@ -129,33 +133,51 @@ const HomePage = () => {
       role: "Patient",
       quote: "Found the perfect specialist in minutes!",
       rating: 5,
-      image: "/images/patient1.jpg"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
     },
     {
       name: "Maria S.",
       role: "Patient",
       quote: "The booking process was incredibly smooth.",
       rating: 4,
-      image: "/images/patient2.jpg"
+      image: "https://images.unsplash.com/photo-1494790108755-2616b9a06beb?w=100&h=100&fit=crop&crop=face"
     },
     {
       name: "David K.",
       role: "Patient",
       quote: "Saved me hours of waiting at the clinic!",
       rating: 5,
-      image: "/images/patient3.jpg"
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
     }
   ];
 
-  // Animation styles
-  const cardHoverStyle = {
-    transform: 'translateY(-8px)',
-    boxShadow: `0 12px 20px ${primaryColor}20`,
-    borderColor: 'currentColor'
+  const handleSearch = () => {
+    console.log('Searching for:', searchTerm, 'in', location);
+    // Here you would integrate with your backend API
+    // Example: navigate to search results page
+    alert(`Searching for "${searchTerm}" in "${location}"`);
+  };
+
+  const handleBookAppointment = (doctor) => {
+    console.log('Booking appointment with:', doctor.name);
+    // Here you would navigate to booking page or open modal
+    alert(`Booking appointment with ${doctor.name}`);
+  };
+
+  const handleSignUp = () => {
+    console.log('Redirecting to signup...');
+    // Here you would navigate to signup page
+    alert('Redirecting to signup page...');
+  };
+
+  const handleSpecialtyClick = (specialty) => {
+    console.log('Searching specialty:', specialty.name);
+    // Here you would navigate to doctors filtered by specialty
+    alert(`Searching for ${specialty.name} doctors...`);
   };
 
   return (
-    <div className="home-page" style={{ backgroundColor: white }}>
+    <div className="home-page" style={{ backgroundColor: white, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Hero Section */}
       <div className="hero-section" style={{
         background: `linear-gradient(135deg, ${primaryColor} 0%, #1a5fb4 100%)`,
@@ -176,19 +198,24 @@ const HomePage = () => {
           borderRadius: '50px',
           padding: '10px',
           display: 'flex',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '10px'
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             padding: '0 15px',
             flex: 1,
-            borderRight: '1px solid #eee'
+            minWidth: '200px'
           }}>
             <FaSearch style={{ color: textMuted, marginRight: '10px' }} />
             <input 
               type="text" 
               placeholder="Search doctors, specialties..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 border: 'none',
                 outline: 'none',
@@ -202,13 +229,15 @@ const HomePage = () => {
             display: 'flex',
             alignItems: 'center',
             padding: '0 15px',
-            flex: 0.8,
-            borderRight: '1px solid #eee'
+            flex: '0 0 auto',
+            minWidth: '150px'
           }}>
             <FaMapMarkerAlt style={{ color: textMuted, marginRight: '10px' }} />
             <input 
               type="text" 
               placeholder="Location" 
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               style={{
                 border: 'none',
                 outline: 'none',
@@ -218,21 +247,23 @@ const HomePage = () => {
               }}
             />
           </div>
-          <button style={{
-            backgroundColor: primaryColor,
-            color: white,
-            border: 'none',
-            borderRadius: '50px',
-            padding: '10px 25px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            display: 'flex',
-            alignItems: 'center',
-            transition: 'all 0.3s ease',
-            ':hover': {
-              backgroundColor: '#1a5fb4'
-            }
-          }}>
+          <button 
+            onClick={handleSearch}
+            style={{
+              backgroundColor: primaryColor,
+              color: white,
+              border: 'none',
+              borderRadius: '50px',
+              padding: '10px 25px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={e => e.target.style.backgroundColor = '#1a5fb4'}
+            onMouseLeave={e => e.target.style.backgroundColor = primaryColor}
+          >
             <FaSearch style={{ marginRight: '8px' }} />
             Search
           </button>
@@ -266,6 +297,7 @@ const HomePage = () => {
             {specialties.map((specialty, index) => (
               <div 
                 key={index}
+                onClick={() => handleSpecialtyClick(specialty)}
                 style={{
                   backgroundColor: white,
                   borderRadius: '10px',
@@ -274,14 +306,12 @@ const HomePage = () => {
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
                   border: '1px solid #e0e0e0',
-                  color: specialty.color
+                  color: specialty.color,
+                  transform: hoveredCard === `specialty-${index}` ? 'translateY(-8px)' : 'translateY(0)',
+                  boxShadow: hoveredCard === `specialty-${index}` ? `0 12px 20px ${specialty.color}20` : '0 2px 8px rgba(0,0,0,0.05)'
                 }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, cardHoverStyle)}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = '';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-                  e.currentTarget.style.borderColor = '#e0e0e0';
-                }}
+                onMouseEnter={() => setHoveredCard(`specialty-${index}`)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div style={{
                   backgroundColor: `${specialty.color}20`,
@@ -335,11 +365,11 @@ const HomePage = () => {
                   padding: '1.5rem',
                   borderRadius: '10px',
                   transition: 'all 0.3s ease',
-                  ':hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                  }
+                  transform: hoveredCard === `feature-${index}` ? 'translateY(-5px)' : 'translateY(0)',
+                  boxShadow: hoveredCard === `feature-${index}` ? '0 10px 20px rgba(0,0,0,0.1)' : 'none'
                 }}
+                onMouseEnter={() => setHoveredCard(`feature-${index}`)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div style={{
                   color: primaryColor,
@@ -376,11 +406,17 @@ const HomePage = () => {
             marginBottom: '1.5rem' 
           }}>
             <h2 style={{ color: textDark, fontWeight: '600' }}>Top Doctors Near You</h2>
-            <a href="/doctors" style={{ 
-              color: primaryColor, 
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}>View All</a>
+            <button 
+              onClick={() => alert('Navigating to all doctors...')}
+              style={{ 
+                color: primaryColor, 
+                textDecoration: 'none',
+                fontWeight: '500',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >View All</button>
           </div>
           
           <div className="doctors-grid" style={{
@@ -395,15 +431,13 @@ const HomePage = () => {
                   backgroundColor: white,
                   borderRadius: '12px',
                   overflow: 'hidden',
-                  boxShadow: '0 3px 10px rgba(0,0,0,0.08)',
+                  boxShadow: hoveredCard === `doctor-${doctor.id}` ? '0 12px 20px rgba(0,0,0,0.15)' : '0 3px 10px rgba(0,0,0,0.08)',
                   transition: 'all 0.3s ease',
-                  border: '1px solid #e0e0e0'
+                  border: '1px solid #e0e0e0',
+                  transform: hoveredCard === `doctor-${doctor.id}` ? 'translateY(-8px)' : 'translateY(0)'
                 }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, cardHoverStyle)}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = '';
-                  e.currentTarget.style.boxShadow = '0 3px 10px rgba(0,0,0,0.08)';
-                }}
+                onMouseEnter={() => setHoveredCard(`doctor-${doctor.id}`)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div style={{
                   height: '200px',
@@ -424,37 +458,43 @@ const HomePage = () => {
                     <FaMapMarkerAlt style={{ marginRight: '5px', color: primaryColor }} />
                     {doctor.distance} km away • {doctor.reviews} reviews
                   </p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <button style={{
-                      backgroundColor: white,
-                      color: primaryColor,
-                      border: `1px solid ${primaryColor}`,
-                      borderRadius: '8px',
-                      padding: '8px 15px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      fontWeight: '500',
-                      transition: 'all 0.3s ease',
-                      ':hover': {
-                        backgroundColor: lightBackground
-                      }
-                    }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                    <button 
+                      onClick={() => alert(`Viewing ${doctor.name}'s profile...`)}
+                      style={{
+                        backgroundColor: white,
+                        color: primaryColor,
+                        border: `1px solid ${primaryColor}`,
+                        borderRadius: '8px',
+                        padding: '8px 15px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: '500',
+                        transition: 'all 0.3s ease',
+                        flex: 1
+                      }}
+                      onMouseEnter={e => e.target.style.backgroundColor = lightBackground}
+                      onMouseLeave={e => e.target.style.backgroundColor = white}
+                    >
                       View Profile
                     </button>
-                    <button style={{
-                      backgroundColor: primaryColor,
-                      color: white,
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '8px 15px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      fontWeight: '500',
-                      transition: 'all 0.3s ease',
-                      ':hover': {
-                        backgroundColor: '#1a5fb4'
-                      }
-                    }}>
+                    <button 
+                      onClick={() => handleBookAppointment(doctor)}
+                      style={{
+                        backgroundColor: primaryColor,
+                        color: white,
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '8px 15px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: '500',
+                        transition: 'all 0.3s ease',
+                        flex: 1
+                      }}
+                      onMouseEnter={e => e.target.style.backgroundColor = '#1a5fb4'}
+                      onMouseLeave={e => e.target.style.backgroundColor = primaryColor}
+                    >
                       Book Now
                     </button>
                   </div>
@@ -493,10 +533,10 @@ const HomePage = () => {
                 style={{ 
                   textAlign: 'center',
                   transition: 'all 0.3s ease',
-                  ':hover': {
-                    transform: 'translateY(-5px)'
-                  }
+                  transform: hoveredCard === `step-${index}` ? 'translateY(-5px)' : 'translateY(0)'
                 }}
+                onMouseEnter={() => setHoveredCard(`step-${index}`)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div style={{
                   backgroundColor: lightBackground,
@@ -555,11 +595,11 @@ const HomePage = () => {
                   borderRadius: '10px',
                   textAlign: 'center',
                   transition: 'all 0.3s ease',
-                  ':hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                  }
+                  transform: hoveredCard === `testimonial-${index}` ? 'translateY(-5px)' : 'translateY(0)',
+                  boxShadow: hoveredCard === `testimonial-${index}` ? '0 10px 20px rgba(0,0,0,0.1)' : 'none'
                 }}
+                onMouseEnter={() => setHoveredCard(`testimonial-${index}`)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div style={{
                   width: '80px',
@@ -628,39 +668,49 @@ const HomePage = () => {
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '1rem'
+            gap: '1rem',
+            flexWrap: 'wrap'
           }}>
-            <button style={{
-              backgroundColor: white,
-              color: primaryColor,
-              border: 'none',
-              borderRadius: '50px',
-              padding: '12px 30px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '1rem',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.2)'
-              }
-            }}>
+            <button 
+              onClick={handleSignUp}
+              style={{
+                backgroundColor: white,
+                color: primaryColor,
+                border: 'none',
+                borderRadius: '50px',
+                padding: '12px 30px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: '1rem',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={e => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+              }}
+              onMouseLeave={e => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
               Sign Up Now
             </button>
-            <button style={{
-              backgroundColor: 'transparent',
-              color: white,
-              border: '2px solid white',
-              borderRadius: '50px',
-              padding: '12px 30px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '1rem',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              }
-            }}>
+            <button 
+              onClick={() => alert('Browsing doctors...')}
+              style={{
+                backgroundColor: 'transparent',
+                color: white,
+                border: '2px solid white',
+                borderRadius: '50px',
+                padding: '12px 30px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: '1rem',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={e => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+            >
               Browse Doctors
             </button>
           </div>
