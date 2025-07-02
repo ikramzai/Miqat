@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { 
-  FaSearch, 
-  FaMapMarkerAlt, 
-  FaCalendarAlt, 
-  FaClock, 
-  FaStar, 
+import React, { useState } from "react";
+import {
+  FaSearch,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaClock,
+  FaStar,
   FaRegStar,
   FaHeartbeat,
   FaUserMd,
@@ -15,9 +15,8 @@ import {
   FaEye,
   FaFlask,
   FaProcedures,
-  FaAllergies,
-  FaLungs,
   FaSyringe,
+  FaLungs,
   FaFemale,
   FaTint,
   FaChartLine,
@@ -27,695 +26,562 @@ import {
   FaShieldAlt,
   FaBell,
   FaExchangeAlt,
-  FaPhone,
   FaComments,
-  FaUserFriends
-} from 'react-icons/fa';
+  FaArrowRight,
+  FaPlay,
+  FaUser,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [location, setLocation] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [location, setLocation] = useState("");
   const [hoveredCard, setHoveredCard] = useState(null);
+  const navigate = useNavigate();
 
   // Color scheme
-  const primaryColor = '#2a7de1';
-  const lightBackground = '#e8f4fc';
-  const white = '#ffffff';
-  const textDark = '#333333';
-  const textMuted = '#666666';
+  const primaryColor = "#2a7de1";
+  const secondaryColor = "#1e88e5";
+  const lightBackground = "#f8faff";
+  const white = "#ffffff";
+  const textDark = "#2c3e50";
+  const textMuted = "#6c757d";
 
   // Enhanced specialties with colors and animations
   const specialties = [
-    { name: 'Cardiology', icon: <FaHeartbeat />, color: '#e74c3c' },
-    { name: 'Dermatology', icon: <FaUserMd />, color: '#8e44ad' },
-    { name: 'Pediatrics', icon: <FaChild />, color: '#3498db' },
-    { name: 'Neurology', icon: <FaHeadSideVirus />, color: '#f39c12' },
-    { name: 'Dentistry', icon: <FaTooth />, color: '#1abc9c' },
-    { name: 'Orthopedics', icon: <FaBone />, color: '#95a5a6' },
-    { name: 'Ophthalmology', icon: <FaEye />, color: '#9b59b6' },
-    { name: 'Pathology', icon: <FaFlask />, color: '#e67e22' },
-    { name: 'Surgery', icon: <FaProcedures />, color: '#c0392b' },
-    { name: 'Immunology', icon: <FaSyringe />, color: '#16a085' },
-    { name: 'Pulmonology', icon: <FaLungs />, color: '#2980b9' },
-    { name: 'Gynecology', icon: <FaFemale />, color: '#e84393' },
-    { name: 'Urology', icon: <FaTint />, color: '#0984e3' },
-    { name: 'Endocrinology', icon: <FaChartLine />, color: '#fdcb6e' },
-    { name: 'Oncology', icon: <FaRadiation />, color: '#d63031' },
-    { name: 'ENT', icon: <FaDeaf />, color: '#fd79a8' }
+    {
+      name: "Cardiology",
+      icon: <FaHeartbeat />,
+      color: "#e74c3c",
+    },
+    {
+      name: "Dermatology",
+      icon: <FaUserMd />,
+      color: "#8e44ad",
+    },
+    {
+      name: "Pediatrics",
+      icon: <FaChild />,
+      color: "#3498db",
+    },
+    {
+      name: "Neurology",
+      icon: <FaHeadSideVirus />,
+      color: "#f39c12",
+    },
+    {
+      name: "Dentistry",
+      icon: <FaTooth />,
+      color: "#1abc9c",
+    },
+    {
+      name: "Orthopedics",
+      icon: <FaBone />,
+      color: "#95a5a6",
+    },
+    {
+      name: "Ophthalmology",
+      icon: <FaEye />,
+      color: "#9b59b6",
+    },
+    {
+      name: "Pathology",
+      icon: <FaFlask />,
+      color: "#e67e22",
+    },
+    {
+      name: "Surgery",
+      icon: <FaProcedures />,
+      color: "#c0392b",
+    },
+    {
+      name: "Immunology",
+      icon: <FaSyringe />,
+      color: "#16a085",
+    },
+    {
+      name: "Pulmonology",
+      icon: <FaLungs />,
+      color: "#2980b9",
+    },
+    {
+      name: "Gynecology",
+      icon: <FaFemale />,
+      color: "#e84393",
+    },
   ];
 
   const doctors = [
     {
       id: 1,
-      name: 'Dr. Sarah Johnson',
-      specialty: 'Cardiologist',
+      name: "Dr. Sarah Johnson",
+      specialty: "Cardiologist",
       rating: 4.8,
       reviews: 124,
       distance: 2.5,
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face'
+      experience: "15 years",
+      image:
+        "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face",
     },
     {
       id: 2,
-      name: 'Dr. Michael Chen',
-      specialty: 'Dermatologist',
+      name: "Dr. Michael Chen",
+      specialty: "Dermatologist",
       rating: 4.9,
       reviews: 89,
       distance: 1.2,
-      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&crop=face'
+      experience: "12 years",
+      image:
+        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&crop=face",
     },
     {
       id: 3,
-      name: 'Dr. Priya Patel',
-      specialty: 'Pediatrician',
+      name: "Dr. Priya Patel",
+      specialty: "Pediatrician",
       rating: 4.7,
       reviews: 156,
       distance: 3.1,
-      image: 'https://images.unsplash.com/photo-1594824475317-7e2f8e8a4d21?w=300&h=300&fit=crop&crop=face'
-    }
+      experience: "18 years",
+      image:
+        "https://images.unsplash.com/photo-1594824475317-7e2f8e8a4d21?w=300&h=300&fit=crop&crop=face",
+    },
   ];
 
   const features = [
     {
       icon: <FaCheckCircle size={40} />,
       title: "Verified Doctors",
-      description: "All doctors are thoroughly vetted and certified"
+      description: "All doctors are thoroughly vetted and certified",
+      color: "#28a745",
     },
     {
       icon: <FaCalendarAlt size={40} />,
       title: "24/7 Booking",
-      description: "Book appointments anytime, anywhere"
+      description: "Book appointments anytime, anywhere",
+      color: "#17a2b8",
     },
     {
       icon: <FaShieldAlt size={40} />,
       title: "Secure Payments",
-      description: "Your transactions are always protected"
+      description: "Your transactions are always protected",
+      color: "#ffc107",
     },
     {
       icon: <FaBell size={40} />,
       title: "Smart Reminders",
-      description: "Never miss an appointment again"
+      description: "Never miss an appointment again",
+      color: "#dc3545",
     },
-    {
-      icon: <FaExchangeAlt size={40} />,
-      title: "Easy Rescheduling",
-      description: "Change appointments with one click"
-    },
-    {
-      icon: <FaComments size={40} />,
-      title: "Instant Support",
-      description: "24/7 customer service available"
-    }
   ];
 
   const testimonials = [
     {
       name: "John D.",
       role: "Patient",
-      quote: "Found the perfect specialist in minutes!",
+      quote:
+        "Found the perfect specialist in minutes! The booking process was incredibly smooth and the doctor was excellent.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
     },
     {
       name: "Maria S.",
       role: "Patient",
-      quote: "The booking process was incredibly smooth.",
+      quote:
+        "The booking process was incredibly smooth. I love how easy it is to find and book appointments with qualified doctors.",
       rating: 4,
-      image: "https://images.unsplash.com/photo-1494790108755-2616b9a06beb?w=100&h=100&fit=crop&crop=face"
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "David K.",
       role: "Patient",
-      quote: "Saved me hours of waiting at the clinic!",
+      quote:
+        "Saved me hours of waiting at the clinic! The online booking system is a game-changer for busy professionals.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
-    }
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+    },
+  ];
+
+  // Steps for the process
+  const steps = [
+    {
+      icon: <FaSearch size={28} className="text-primary" />,
+      title: "Search doctor",
+      desc: "We help you find top specialists near you. Let us bring you healthy living as our top priority.",
+    },
+    {
+      icon: <FaUserMd size={28} className="text-primary" />,
+      title: "Check doctor Profile",
+      desc: "See available specialists and their profiles. Get notified when availability opens up.",
+    },
+    {
+      icon: <FaCalendarAlt size={28} className="text-primary" />,
+      title: "Schedule Appointment",
+      desc: "Book appointments in a few clicks. Choose your time and we'll handle the rest.",
+    },
+    {
+      icon: <FaCheckCircle size={28} className="text-primary" />,
+      title: "Get your Solution",
+      desc: "Get the care you need, when you need it. We'll notify you as soon as your appointment is confirmed.",
+    },
   ];
 
   const handleSearch = () => {
-    console.log('Searching for:', searchTerm, 'in', location);
-    // Here you would integrate with your backend API
-    // Example: navigate to search results page
-    alert(`Searching for "${searchTerm}" in "${location}"`);
+    const params = new URLSearchParams();
+    if (searchTerm) params.append("search", searchTerm);
+    if (location) params.append("location", location);
+    navigate(`/search?${params.toString()}`);
   };
 
   const handleBookAppointment = (doctor) => {
-    console.log('Booking appointment with:', doctor.name);
-    // Here you would navigate to booking page or open modal
-    alert(`Booking appointment with ${doctor.name}`);
+    navigate(`/booking/${doctor.id}`);
   };
 
   const handleSignUp = () => {
-    console.log('Redirecting to signup...');
-    // Here you would navigate to signup page
-    alert('Redirecting to signup page...');
+    navigate("/signup");
   };
 
   const handleSpecialtyClick = (specialty) => {
-    console.log('Searching specialty:', specialty.name);
-    // Here you would navigate to doctors filtered by specialty
-    alert(`Searching for ${specialty.name} doctors...`);
+    navigate(`/search?specialty=${encodeURIComponent(specialty.name)}`);
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <span key={i}>
+          {i <= rating ? (
+            <FaStar className="text-warning" />
+          ) : (
+            <FaRegStar className="text-muted" />
+          )}
+        </span>
+      );
+    }
+    return stars;
   };
 
   return (
-    <div className="home-page" style={{ backgroundColor: white, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ background: "#f7faff", minHeight: "100vh" }}>
       {/* Hero Section */}
-      <div className="hero-section" style={{
-        background: `linear-gradient(135deg, ${primaryColor} 0%, #1a5fb4 100%)`,
-        color: white,
-        padding: '4rem 1rem',
-        textAlign: 'center'
-      }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: '600' }}>Find & Book Appointments</h1>
-        <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>
-          Connect with the best doctors near you
-        </p>
-        
-        {/* Search Bar */}
-        <div className="search-container" style={{
-          maxWidth: '800px',
-          margin: '0 auto',
-          backgroundColor: white,
-          borderRadius: '50px',
-          padding: '10px',
-          display: 'flex',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '10px'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 15px',
-            flex: 1,
-            minWidth: '200px'
-          }}>
-            <FaSearch style={{ color: textMuted, marginRight: '10px' }} />
-            <input 
-              type="text" 
-              placeholder="Search doctors, specialties..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                border: 'none',
-                outline: 'none',
-                width: '100%',
-                padding: '8px 0',
-                fontSize: '1rem'
-              }}
-            />
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 15px',
-            flex: '0 0 auto',
-            minWidth: '150px'
-          }}>
-            <FaMapMarkerAlt style={{ color: textMuted, marginRight: '10px' }} />
-            <input 
-              type="text" 
-              placeholder="Location" 
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              style={{
-                border: 'none',
-                outline: 'none',
-                width: '100%',
-                padding: '8px 0',
-                fontSize: '1rem'
-              }}
-            />
-          </div>
-          <button 
-            onClick={handleSearch}
-            style={{
-              backgroundColor: primaryColor,
-              color: white,
-              border: 'none',
-              borderRadius: '50px',
-              padding: '10px 25px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={e => e.target.style.backgroundColor = '#1a5fb4'}
-            onMouseLeave={e => e.target.style.backgroundColor = primaryColor}
+      <section
+        className="container py-5 d-flex flex-column flex-lg-row align-items-center justify-content-between"
+        style={{ minHeight: "60vh" }}
+      >
+        {/* Left: Headline and Search */}
+        <div className="flex-fill" style={{ maxWidth: 540 }}>
+          <h1
+            className="fw-bold mb-3"
+            style={{ fontSize: "2.7rem", lineHeight: 1.1 }}
           >
-            <FaSearch style={{ marginRight: '8px' }} />
-            Search
-          </button>
+            Find local specialists <br /> who can take your{" "}
+            <span className="text-primary">insurance</span>
+          </h1>
+          <p className="mb-4 text-muted" style={{ fontSize: "1.15rem" }}>
+            We help you find available vaccine appointments near you or notify
+            you when availability opens up.
+          </p>
+          <div className="d-flex gap-2 mb-3">
+            <button
+              className="btn btn-primary btn-lg px-5"
+              style={{ borderRadius: 12 }}
+              onClick={handleSignUp}
+            >
+              Get Started
+            </button>
+          </div>
         </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container" style={{ 
-        padding: '3rem 1rem', 
-        maxWidth: '1200px', 
-        margin: '0 auto'
-      }}>
-        {/* Specialties Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          backgroundColor: white,
-          padding: '2rem',
-          borderRadius: '12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-        }}>
-          <h2 style={{ 
-            marginBottom: '1.5rem', 
-            color: textDark,
-            fontWeight: '600'
-          }}>Medical Specialties</h2>
-          <div className="specialties-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-            gap: '1.2rem'
-          }}>
-            {specialties.map((specialty, index) => (
-              <div 
-                key={index}
-                onClick={() => handleSpecialtyClick(specialty)}
-                style={{
-                  backgroundColor: white,
-                  borderRadius: '10px',
-                  padding: '1.5rem 1rem',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                  border: '1px solid #e0e0e0',
-                  color: specialty.color,
-                  transform: hoveredCard === `specialty-${index}` ? 'translateY(-8px)' : 'translateY(0)',
-                  boxShadow: hoveredCard === `specialty-${index}` ? `0 12px 20px ${specialty.color}20` : '0 2px 8px rgba(0,0,0,0.05)'
-                }}
-                onMouseEnter={() => setHoveredCard(`specialty-${index}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div style={{
-                  backgroundColor: `${specialty.color}20`,
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  color: specialty.color
-                }}>
-                  {React.cloneElement(specialty.icon, { size: 24 })}
-                </div>
-                <h3 style={{ 
-                  fontSize: '1rem', 
-                  margin: 0,
-                  color: textDark,
-                  fontWeight: '500'
-                }}>{specialty.name}</h3>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          backgroundColor: white,
-          padding: '3rem 2rem',
-          borderRadius: '12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          textAlign: 'center'
-        }}>
-          <h2 style={{ 
-            marginBottom: '2rem', 
-            color: textDark,
-            fontWeight: '600'
-          }}>Why Choose Our Platform?</h2>
-          
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '2rem',
-            marginTop: '2rem'
-          }}>
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                style={{
-                  padding: '1.5rem',
-                  borderRadius: '10px',
-                  transition: 'all 0.3s ease',
-                  transform: hoveredCard === `feature-${index}` ? 'translateY(-5px)' : 'translateY(0)',
-                  boxShadow: hoveredCard === `feature-${index}` ? '0 10px 20px rgba(0,0,0,0.1)' : 'none'
-                }}
-                onMouseEnter={() => setHoveredCard(`feature-${index}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div style={{
-                  color: primaryColor,
-                  marginBottom: '1rem'
-                }}>
-                  {feature.icon}
-                </div>
-                <h3 style={{
-                  marginBottom: '0.8rem',
-                  color: textDark,
-                  fontWeight: '500'
-                }}>{feature.title}</h3>
-                <p style={{
-                  color: textMuted,
-                  lineHeight: '1.6'
-                }}>{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Top Doctors Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          backgroundColor: white,
-          padding: '2rem',
-          borderRadius: '12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginBottom: '1.5rem' 
-          }}>
-            <h2 style={{ color: textDark, fontWeight: '600' }}>Top Doctors Near You</h2>
-            <button 
-              onClick={() => alert('Navigating to all doctors...')}
-              style={{ 
-                color: primaryColor, 
-                textDecoration: 'none',
-                fontWeight: '500',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer'
+        {/* Right: Doctor Image and Abstract Shapes */}
+        <div
+          className="flex-fill d-flex justify-content-center align-items-center position-relative mt-5 mt-lg-0"
+          style={{ minWidth: 320 }}
+        >
+          {/* Abstract shapes */}
+          <div
+            style={{
+              position: "absolute",
+              top: -30,
+              right: -30,
+              width: 120,
+              height: 120,
+              background: "#e3f0ff",
+              borderRadius: "50%",
+              zIndex: 0,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: -20,
+              left: -20,
+              width: 80,
+              height: 80,
+              background: "#ffd6e0",
+              borderRadius: "50%",
+              zIndex: 0,
+            }}
+          />
+          {/* Doctor card */}
+          <div
+            className="card shadow-lg p-0"
+            style={{ borderRadius: 24, width: 320, zIndex: 1 }}
+          >
+            <img
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face"
+              alt="Doctor"
+              className="w-100"
+              style={{
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24,
+                height: 320,
+                objectFit: "cover",
               }}
-            >View All</button>
+            />
+            <div className="p-3 text-center">
+              <span className="fw-bold text-primary">Dr. Jane Doe</span>
+              <div className="text-muted" style={{ fontSize: 14 }}>
+                General Practitioner
+              </div>
+            </div>
           </div>
-          
-          <div className="doctors-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '1.5rem'
-          }}>
-            {doctors.map(doctor => (
-              <div 
-                key={doctor.id} 
-                style={{
-                  backgroundColor: white,
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: hoveredCard === `doctor-${doctor.id}` ? '0 12px 20px rgba(0,0,0,0.15)' : '0 3px 10px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
-                  border: '1px solid #e0e0e0',
-                  transform: hoveredCard === `doctor-${doctor.id}` ? 'translateY(-8px)' : 'translateY(0)'
-                }}
-                onMouseEnter={() => setHoveredCard(`doctor-${doctor.id}`)}
-                onMouseLeave={() => setHoveredCard(null)}
+        </div>
+      </section>
+
+      {/* Steps Section */}
+      <section className="container py-5">
+        <div className="text-center mb-5">
+          <span
+            className="text-uppercase text-primary fw-bold"
+            style={{ letterSpacing: 1 }}
+          >
+            Patient Solution
+          </span>
+          <h2 className="fw-bold mt-2" style={{ fontSize: "2rem" }}>
+            4 easy steps to get your Solution
+          </h2>
+        </div>
+        <div className="row g-4 justify-content-center">
+          {steps.map((step, idx) => (
+            <div className="col-12 col-md-6 col-lg-3" key={idx}>
+              <div
+                className="card border-0 shadow-sm h-100 text-center p-4"
+                style={{ borderRadius: 18 }}
               >
-                <div style={{
-                  height: '200px',
-                  backgroundImage: `url(${doctor.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}></div>
-                <div style={{ padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <h3 style={{ margin: 0, color: textDark }}>{doctor.name}</h3>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <FaStar style={{ color: '#FFD700', marginRight: '5px' }} />
-                      <span style={{ color: textDark }}>{doctor.rating}</span>
+                <div className="mb-3">{step.icon}</div>
+                <h5 className="fw-bold mb-2">{step.title}</h5>
+                <p className="text-muted mb-0" style={{ fontSize: 15 }}>
+                  {step.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Specialties Section */}
+      <section className="py-5" style={{ backgroundColor: white }}>
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="fw-bold mb-3"
+              style={{ color: textDark, fontSize: "2.5rem" }}
+            >
+              Medical Specialties
+            </h2>
+            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+              Find specialists in every field of medicine
+            </p>
+          </div>
+
+          <div className="row g-4">
+            {specialties.map((specialty, index) => (
+              <div className="col-lg-3 col-md-4 col-sm-6" key={index}>
+                <div
+                  className="card border-0 shadow-sm h-100 text-center"
+                  style={{
+                    borderRadius: "15px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    transform:
+                      hoveredCard === index
+                        ? "translateY(-10px)"
+                        : "translateY(0)",
+                    boxShadow:
+                      hoveredCard === index
+                        ? "0 20px 40px rgba(0,0,0,0.1)"
+                        : "0 5px 15px rgba(0,0,0,0.08)",
+                  }}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  onClick={() => handleSpecialtyClick(specialty)}
+                >
+                  <div className="card-body p-4">
+                    <div
+                      className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                      style={{
+                        width: "70px",
+                        height: "70px",
+                        backgroundColor: `${specialty.color}20`,
+                        color: specialty.color,
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.5rem" }}>
+                        {specialty.icon}
+                      </span>
+                    </div>
+                    <h5 className="fw-bold mb-2" style={{ color: textDark }}>
+                      {specialty.name}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-5">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="fw-bold mb-3"
+              style={{ color: textDark, fontSize: "2.5rem" }}
+            >
+              Why Choose MiQat?
+            </h2>
+            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+              Experience healthcare booking like never before
+            </p>
+          </div>
+
+          <div className="row g-4">
+            {features.map((feature, index) => (
+              <div className="col-lg-3 col-md-6" key={index}>
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{ borderRadius: "15px" }}
+                >
+                  <div className="card-body p-4 text-center">
+                    <div
+                      className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                        backgroundColor: `${feature.color}20`,
+                        color: feature.color,
+                      }}
+                    >
+                      {feature.icon}
+                    </div>
+                    <h5 className="fw-bold mb-3" style={{ color: textDark }}>
+                      {feature.title}
+                    </h5>
+                    <p className="text-muted mb-0">{feature.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-5">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="fw-bold mb-3"
+              style={{ color: textDark, fontSize: "2.5rem" }}
+            >
+              What Our Patients Say
+            </h2>
+            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+              Real experiences from our community
+            </p>
+          </div>
+
+          <div className="row g-4">
+            {testimonials.map((testimonial, index) => (
+              <div className="col-lg-4" key={index}>
+                <div
+                  className="card border-0 shadow-sm h-100"
+                  style={{ borderRadius: "15px" }}
+                >
+                  <div className="card-body p-4">
+                    <div className="d-flex align-items-center mb-3">
+                      {renderStars(testimonial.rating)}
+                    </div>
+                    <p
+                      className="text-muted mb-4"
+                      style={{ fontStyle: "italic" }}
+                    >
+                      "{testimonial.quote}"
+                    </p>
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="rounded-circle me-3"
+                        width="50"
+                        height="50"
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div>
+                        <h6
+                          className="fw-bold mb-0"
+                          style={{ color: textDark }}
+                        >
+                          {testimonial.name}
+                        </h6>
+                        <small className="text-muted">{testimonial.role}</small>
+                      </div>
                     </div>
                   </div>
-                  <p style={{ color: textMuted, marginBottom: '0.5rem' }}>{doctor.specialty}</p>
-                  <p style={{ color: textMuted, marginBottom: '1rem', fontSize: '0.9rem' }}>
-                    <FaMapMarkerAlt style={{ marginRight: '5px', color: primaryColor }} />
-                    {doctor.distance} km away • {doctor.reviews} reviews
-                  </p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                    <button 
-                      onClick={() => alert(`Viewing ${doctor.name}'s profile...`)}
-                      style={{
-                        backgroundColor: white,
-                        color: primaryColor,
-                        border: `1px solid ${primaryColor}`,
-                        borderRadius: '8px',
-                        padding: '8px 15px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease',
-                        flex: 1
-                      }}
-                      onMouseEnter={e => e.target.style.backgroundColor = lightBackground}
-                      onMouseLeave={e => e.target.style.backgroundColor = white}
-                    >
-                      View Profile
-                    </button>
-                    <button 
-                      onClick={() => handleBookAppointment(doctor)}
-                      style={{
-                        backgroundColor: primaryColor,
-                        color: white,
-                        border: 'none',
-                        borderRadius: '8px',
-                        padding: '8px 15px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease',
-                        flex: 1
-                      }}
-                      onMouseEnter={e => e.target.style.backgroundColor = '#1a5fb4'}
-                      onMouseLeave={e => e.target.style.backgroundColor = primaryColor}
-                    >
-                      Book Now
-                    </button>
-                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* How It Works Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          backgroundColor: white,
-          padding: '2rem',
-          borderRadius: '12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-        }}>
-          <h2 style={{ 
-            marginBottom: '2rem', 
-            color: textDark,
-            fontWeight: '600',
-            textAlign: 'center'
-          }}>How It Works</h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-            gap: '2rem' 
-          }}>
-            {[
-              { icon: <FaSearch size={30} />, title: 'Find a Doctor', desc: 'Search by specialty, location, or doctor name' },
-              { icon: <FaCalendarAlt size={30} />, title: 'Book Appointment', desc: 'Choose date and time that works for you' },
-              { icon: <FaClock size={30} />, title: 'Get Treatment', desc: 'Visit doctor and receive medical care' }
-            ].map((step, index) => (
-              <div 
-                key={index} 
-                style={{ 
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  transform: hoveredCard === `step-${index}` ? 'translateY(-5px)' : 'translateY(0)'
-                }}
-                onMouseEnter={() => setHoveredCard(`step-${index}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div style={{
-                  backgroundColor: lightBackground,
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1.5rem',
-                  color: primaryColor
-                }}>
-                  {step.icon}
-                </div>
-                <h3 style={{ 
-                  marginBottom: '0.8rem',
-                  color: textDark,
-                  fontWeight: '500'
-                }}>{step.title}</h3>
-                <p style={{ 
-                  color: textMuted,
-                  lineHeight: '1.5'
-                }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          backgroundColor: white,
-          padding: '3rem 2rem',
-          borderRadius: '12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          textAlign: 'center'
-        }}>
-          <h2 style={{ 
-            marginBottom: '2rem', 
-            color: textDark,
-            fontWeight: '600'
-          }}>What Our Patients Say</h2>
-          
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '2rem',
-            marginTop: '2rem'
-          }}>
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={index}
-                style={{
-                  backgroundColor: lightBackground,
-                  padding: '2rem',
-                  borderRadius: '10px',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  transform: hoveredCard === `testimonial-${index}` ? 'translateY(-5px)' : 'translateY(0)',
-                  boxShadow: hoveredCard === `testimonial-${index}` ? '0 10px 20px rgba(0,0,0,0.1)' : 'none'
-                }}
-                onMouseEnter={() => setHoveredCard(`testimonial-${index}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  backgroundImage: `url(${testimonial.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  margin: '0 auto 1.5rem',
-                  border: `3px solid ${primaryColor}`
-                }}></div>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  {[...Array(5)].map((_, i) => (
-                    i < testimonial.rating ? 
-                    <FaStar key={i} style={{ color: '#FFD700', margin: '0 2px' }} /> : 
-                    <FaRegStar key={i} style={{ color: '#FFD700', margin: '0 2px' }} />
-                  ))}
-                </div>
-                <p style={{
-                  fontStyle: 'italic',
-                  color: textMuted,
-                  marginBottom: '1.5rem',
-                  lineHeight: '1.6'
-                }}>"{testimonial.quote}"</p>
-                <h4 style={{
-                  marginBottom: '0.3rem',
-                  color: textDark,
-                  fontWeight: '500'
-                }}>{testimonial.name}</h4>
-                <p style={{
-                  color: primaryColor,
-                  fontSize: '0.9rem'
-                }}>{testimonial.role}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Final CTA Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          background: `linear-gradient(135deg, ${primaryColor} 0%, #1a5fb4 100%)`,
-          padding: '4rem 2rem',
-          borderRadius: '12px',
-          textAlign: 'center',
-          color: white
-        }}>
-          <h2 style={{ 
-            marginBottom: '1rem', 
-            fontWeight: '600',
-            fontSize: '2rem'
-          }}>Ready to Book Your Appointment?</h2>
-          <p style={{ 
-            marginBottom: '2rem',
-            fontSize: '1.1rem',
-            maxWidth: '600px',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}>
-            Join thousands of patients who found their perfect doctor through our platform
+      {/* CTA Section */}
+      <section
+        className="py-5"
+        style={{
+          background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
+          color: white,
+        }}
+      >
+        <div className="container text-center">
+          <h2 className="fw-bold mb-3" style={{ fontSize: "2.5rem" }}>
+            Ready to Get Started?
+          </h2>
+          <p className="lead mb-4" style={{ fontSize: "1.2rem", opacity: 0.9 }}>
+            Join thousands of patients who trust MiQat for their healthcare
+            needs
           </p>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1rem',
-            flexWrap: 'wrap'
-          }}>
-            <button 
+          <div className="d-flex gap-3 justify-content-center flex-wrap">
+            <button
+              className="btn btn-light btn-lg px-4 py-3 fw-semibold"
               onClick={handleSignUp}
-              style={{
-                backgroundColor: white,
-                color: primaryColor,
-                border: 'none',
-                borderRadius: '50px',
-                padding: '12px 30px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={e => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-              }}
-              onMouseLeave={e => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
-              }}
+              style={{ borderRadius: "10px" }}
             >
-              Sign Up Now
+              Sign Up Now <FaArrowRight className="ms-2" />
             </button>
-            <button 
-              onClick={() => alert('Browsing doctors...')}
-              style={{
-                backgroundColor: 'transparent',
-                color: white,
-                border: '2px solid white',
-                borderRadius: '50px',
-                padding: '12px 30px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={e => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-              onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+            <button
+              className="btn btn-outline-light btn-lg px-4 py-3 fw-semibold"
+              onClick={() => navigate("/search")}
+              style={{ borderRadius: "10px" }}
             >
-              Browse Doctors
+              Find a Doctor
             </button>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 };

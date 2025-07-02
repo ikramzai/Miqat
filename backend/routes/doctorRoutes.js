@@ -1,22 +1,33 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
   registerDoctor,
   loginDoctor,
-  getDoctorProfile,
-  updateDoctorProfile,
   getAllDoctors,
   getDoctorById,
-  deleteDoctor
-} = require('../controllers/doctorController');
-const { protect } = require('../middleware/authMiddleware');
+  updateDoctorProfile,
+  getDoctorProfile,
+  deleteDoctor,
+  searchDoctors,
+} = require("../controllers/doctorController");
+const { protect } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
-router.post('/register', registerDoctor);
-router.post('/login', loginDoctor);
-router.get('/', getAllDoctors);
-router.get('/:id', getDoctorById);
-router.get('/profile/me', protect, getDoctorProfile);
-router.put('/profile/me', protect, updateDoctorProfile);
-router.delete('/profile/me', protect, deleteDoctor);
+// Public routes
+router.post("/register", registerDoctor);
+router.post("/login", loginDoctor);
+router.get("/", getAllDoctors);
+router.get("/search", searchDoctors);
+router.get("/:id", getDoctorById);
+
+// Protected routes
+router.get("/profile/me", protect, getDoctorProfile);
+router.put(
+  "/profile/me",
+  protect,
+  upload.single("profilePicture"),
+  updateDoctorProfile
+);
+router.delete("/profile/me", protect, deleteDoctor);
 
 module.exports = router;

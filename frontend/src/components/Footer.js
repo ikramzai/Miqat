@@ -60,9 +60,9 @@ const Footer = () => {
           <h3 style={{ color: textDark, marginBottom: '1rem' }}>Contact Us</h3>
           <address style={{ color: textMuted, fontStyle: 'normal', lineHeight: '1.6' }}>
             <p>123 Medical Drive</p>
-            <p>Doha, Qatar</p>
-            <p>Email: info@mediqat.com</p>
-            <p>Phone: +974 1234 5678</p>
+            <p>Agadir, Morocco</p>
+            <p>Email: info@miqat.com</p>
+            <p>Phone: +212 1234 5678</p>
           </address>
         </div>
 
