@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 const notificationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    required: true,
+    // This will reference either Doctor or Patient based on the userType
+  },
+  userType: {
+    type: String,
+    enum: ["doctor", "patient"],
     required: true,
   },
   message: {

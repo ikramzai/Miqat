@@ -7,7 +7,9 @@ const patientSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone: String,
+    location: String,
     profilePicture: String,
+    hasLoggedInBefore: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

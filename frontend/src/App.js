@@ -10,6 +10,7 @@ import DoctorProfilePage from "./pages/DoctorProfilePage";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import ProfilePage from "./pages/ProfilePage";
 import BookingPage from "./pages/BookingPage";
+import ToastContainer from "./components/ToastContainer";
 import React from "react";
 
 const AppointmentDetails = () => (
@@ -42,6 +43,7 @@ function App() {
           {/* Add more routes as needed */}
         </Routes>
       </Layout>
+      <ToastContainer />
     </Router>
   );
 }

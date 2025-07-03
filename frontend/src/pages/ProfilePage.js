@@ -88,6 +88,7 @@ const ProfilePage = () => {
               name: response.data.name || "",
               email: response.data.email || "",
               phone: response.data.phone || "",
+              location: response.data.location || "",
             }
       );
     } catch (err) {
@@ -182,8 +183,8 @@ const ProfilePage = () => {
       formDataToSend.append("name", formData.name.trim());
       formDataToSend.append("email", formData.email.trim());
       formDataToSend.append("phone", formData.phone.trim());
+      formDataToSend.append("location", formData.location.trim());
       if (userType === "doctor") {
-        formDataToSend.append("location", formData.location.trim());
         formDataToSend.append("specialty", formData.specialty.trim());
         formDataToSend.append("fees", formData.fees);
       }
@@ -215,6 +216,7 @@ const ProfilePage = () => {
               name: res.data.name || "",
               email: res.data.email || "",
               phone: res.data.phone || "",
+              location: res.data.location || "",
             }
       );
       setSelectedFile(null);
@@ -276,6 +278,7 @@ const ProfilePage = () => {
             name: user?.name || "",
             email: user?.email || "",
             phone: user?.phone || "",
+            location: user?.location || "",
           }
     );
   };

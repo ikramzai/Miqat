@@ -26,26 +26,29 @@ import {
   FaChartLine,
   FaRadiation,
   FaDeaf,
+  FaSort,
 } from "react-icons/fa";
 import defaultUserImg from "../assets/default-user.png";
+import LoadingSpinner from "../components/LoadingSpinner";
+import SearchFilters from "../components/SearchFilters";
+import DoctorCard from "../components/DoctorCard";
 
 const SearchDoctorsPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // Filter states
   const [filters, setFilters] = useState({
-    specialty: searchParams.get("specialty") || "",
-    location: searchParams.get("location") || "",
-    rating: searchParams.get("rating") || "",
-    availability: searchParams.get("availability") || "",
-    searchTerm: searchParams.get("search") || "",
+    search: "",
+    specialty: "",
+    location: "",
+    rating: "",
+    availability: "",
   });
-
+  const [sortBy, setSortBy] = useState("name");
   const [showFilters, setShowFilters] = useState(false);
 
   // Specialties with icons
@@ -68,311 +71,230 @@ const SearchDoctorsPage = () => {
     { name: "ENT", icon: <FaDeaf />, color: "#fd79a8" },
   ];
 
-  // Fetch doctors based on filters
   useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        // Build query parameters
-        const params = new URLSearchParams();
-        if (filters.specialty) params.append("specialty", filters.specialty);
-        if (filters.location) params.append("location", filters.location);
-        if (filters.rating) params.append("rating", filters.rating);
-        if (filters.availability)
-          params.append("availability", filters.availability);
-        if (filters.searchTerm) params.append("search", filters.searchTerm);
-
-        const response = await api.get(`/doctors/search?${params.toString()}`);
-        setDoctors(response.data);
-      } catch (err) {
-        console.error("Error fetching doctors:", err);
-        setError("Failed to load doctors. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDoctors();
-  }, [filters]);
+  }, []);
 
-  // Update URL when filters change
   useEffect(() => {
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) params.append(key, value);
-    });
-    setSearchParams(params);
-  }, [filters, setSearchParams]);
+    applyFilters();
+  }, [doctors, filters, sortBy]);
 
-  const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  const fetchDoctors = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await api.get("/doctors");
+      setDoctors(response.data);
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
+      setError("Failed to load doctors. Please try again.");
+      if (window.showToast) {
+        window.showToast("Failed to load doctors", "error");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const clearFilters = () => {
+  const applyFilters = () => {
+    let filtered = [...doctors];
+
+    // Apply search filter
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.name.toLowerCase().includes(searchTerm) ||
+          doctor.specialty.toLowerCase().includes(searchTerm) ||
+          (doctor.location &&
+            doctor.location.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    // Apply specialty filter
+    if (filters.specialty) {
+      filtered = filtered.filter(
+        (doctor) => doctor.specialty === filters.specialty
+      );
+    }
+
+    // Apply location filter
+    if (filters.location) {
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.location &&
+          doctor.location.toLowerCase().includes(filters.location.toLowerCase())
+      );
+    }
+
+    // Apply rating filter
+    if (filters.rating) {
+      const minRating = parseFloat(filters.rating);
+      filtered = filtered.filter((doctor) => (doctor.rating || 0) >= minRating);
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "rating":
+          return (b.rating || 0) - (a.rating || 0);
+        case "specialty":
+          return a.specialty.localeCompare(b.specialty);
+        case "location":
+          return (a.location || "").localeCompare(b.location || "");
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredDoctors(filtered);
+  };
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleSearch = () => {
+    applyFilters();
+    if (window.showToast) {
+      window.showToast(`Found ${filteredDoctors.length} doctors`, "info");
+    }
+  };
+
+  const handleBookAppointment = (doctor) => {
+    if (window.showToast) {
+      window.showToast(
+        `Redirecting to book appointment with Dr. ${doctor.name}`,
+        "info"
+      );
+    }
+    // Navigation will be handled by DoctorCard component
+  };
+
+  const clearAllFilters = () => {
     setFilters({
+      search: "",
       specialty: "",
       location: "",
       rating: "",
       availability: "",
-      searchTerm: "",
     });
-  };
-
-  const handleBookAppointment = (doctorId) => {
-    navigate(`/booking/${doctorId}`);
-  };
-
-  const handleViewProfile = (doctorId) => {
-    navigate(`/doctor/${doctorId}`);
-  };
-
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span key={i}>
-          {i <= rating ? (
-            <FaStar className="text-warning" />
-          ) : (
-            <FaRegStar className="text-muted" />
-          )}
-        </span>
-      );
+    if (window.showToast) {
+      window.showToast("Filters cleared", "info");
     }
-    return stars;
   };
 
   if (loading) {
     return (
-      <div className="container mt-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-        <p className="mt-3">Searching for doctors...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
       <div className="container mt-5">
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
+        <LoadingSpinner text="Finding the best doctors for you..." />
       </div>
     );
   }
 
   return (
-    <div
-      className="container mt-4"
-      style={{ backgroundColor: "#f2f5ff", minHeight: "100vh" }}
-    >
-      {/* Search Header */}
+    <div className="container mt-4">
+      {/* Header */}
       <div className="row mb-4">
         <div className="col-12">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h2 className="text-primary mb-3">Find a Doctor</h2>
-
-              {/* Search Bar */}
-              <div className="row g-3 mb-3">
-                <div className="col-md-6">
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <FaSearch />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search by name, specialty, or symptoms..."
-                      value={filters.searchTerm}
-                      onChange={(e) =>
-                        handleFilterChange("searchTerm", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <FaMapMarkerAlt />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Location"
-                      value={filters.location}
-                      onChange={(e) =>
-                        handleFilterChange("location", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col-md-2">
-                  <button
-                    className="btn btn-outline-primary w-100"
-                    onClick={() => setShowFilters(!showFilters)}
-                  >
-                    <FaFilter /> Filters
-                  </button>
-                </div>
-              </div>
-
-              {/* Advanced Filters */}
-              {showFilters && (
-                <div className="row g-3 mb-3">
-                  <div className="col-md-3">
-                    <select
-                      className="form-select"
-                      value={filters.specialty}
-                      onChange={(e) =>
-                        handleFilterChange("specialty", e.target.value)
-                      }
-                    >
-                      <option value="">All Specialties</option>
-                      {specialties.map((specialty, index) => (
-                        <option key={index} value={specialty.name}>
-                          {specialty.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-3">
-                    <select
-                      className="form-select"
-                      value={filters.rating}
-                      onChange={(e) =>
-                        handleFilterChange("rating", e.target.value)
-                      }
-                    >
-                      <option value="">All Ratings</option>
-                      <option value="4">4+ Stars</option>
-                      <option value="3">3+ Stars</option>
-                      <option value="2">2+ Stars</option>
-                    </select>
-                  </div>
-                  <div className="col-md-3">
-                    <select
-                      className="form-select"
-                      value={filters.availability}
-                      onChange={(e) =>
-                        handleFilterChange("availability", e.target.value)
-                      }
-                    >
-                      <option value="">Any Availability</option>
-                      <option value="today">Available Today</option>
-                      <option value="week">Available This Week</option>
-                      <option value="next">Available Next Week</option>
-                    </select>
-                  </div>
-                  <div className="col-md-3">
-                    <button
-                      className="btn btn-outline-secondary w-100"
-                      onClick={clearFilters}
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                </div>
-              )}
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <h1 className="text-primary fw-bold mb-2">Find a Doctor</h1>
+              <p className="text-muted mb-0">
+                Discover qualified healthcare professionals in your area
+              </p>
             </div>
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <FaFilter className="me-1" />
+              {showFilters ? "Hide" : "Show"} Filters
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Results */}
-      <div className="row">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h4 className="text-primary mb-0">
-              {doctors.length} Doctor{doctors.length !== 1 ? "s" : ""} Found
-            </h4>
-            <div className="text-muted">Showing results for your search</div>
-          </div>
+      {/* Filters */}
+      {showFilters && (
+        <SearchFilters
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onSearch={handleSearch}
+        />
+      )}
 
-          {error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          )}
-
-          {doctors.length === 0 && !loading && (
-            <div className="text-center py-5">
-              <h5 className="text-muted">No doctors found</h5>
-              <p className="text-muted">Try adjusting your search criteria</p>
-            </div>
-          )}
-
-          {/* Doctor Cards */}
-          <div className="row g-4">
-            {doctors.map((doctor) => (
-              <div key={doctor._id} className="col-lg-6 col-xl-4">
-                <div className="card shadow-sm h-100">
-                  <div className="card-body">
-                    <div className="d-flex align-items-start mb-3">
-                      <img
-                        src={doctor.image ? doctor.image : defaultUserImg}
-                        alt={doctor.name}
-                        className="rounded-circle me-3"
-                        width="80"
-                        height="80"
-                        style={{ objectFit: "cover" }}
-                      />
-                      <div className="flex-grow-1">
-                        <h5 className="card-title mb-1">{doctor.name}</h5>
-                        <p className="text-muted mb-1">{doctor.specialty}</p>
-                        <div className="d-flex align-items-center mb-1">
-                          {renderStars(doctor.rating || 4.5)}
-                          <span className="ms-2 text-muted">
-                            ({doctor.reviews || 0} reviews)
-                          </span>
-                        </div>
-                        {doctor.location && (
-                          <p className="text-muted mb-0">
-                            <FaMapMarkerAlt className="me-1" />
-                            {doctor.location}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    {doctor.fees && (
-                      <p className="text-primary fw-bold mb-2">
-                        Consultation Fee: ${doctor.fees}
-                      </p>
-                    )}
-
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-primary flex-fill"
-                        onClick={() => handleBookAppointment(doctor._id)}
-                      >
-                        <FaCalendarAlt className="me-1" />
-                        Book Now
-                      </button>
-                      <button
-                        className="btn btn-outline-primary"
-                        onClick={() => handleViewProfile(doctor._id)}
-                      >
-                        View Profile
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {/* Results Header */}
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <h5 className="mb-0">
+            {filteredDoctors.length} doctor
+            {filteredDoctors.length !== 1 ? "s" : ""} found
+          </h5>
+        </div>
+        <div className="col-md-6">
+          <div className="d-flex justify-content-end align-items-center gap-3">
+            <label className="form-label mb-0 fw-semibold">Sort by:</label>
+            <select
+              className="form-select"
+              style={{ width: "auto" }}
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="name">Name</option>
+              <option value="rating">Rating</option>
+              <option value="specialty">Specialty</option>
+              <option value="location">Location</option>
+            </select>
           </div>
         </div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
+      {/* Doctors Grid */}
+      {filteredDoctors.length === 0 ? (
+        <div className="text-center py-5">
+          <FaSearch size={48} className="text-muted mb-3" />
+          <h4 className="text-muted">No doctors found</h4>
+          <p className="text-muted">
+            Try adjusting your search criteria or filters
+          </p>
+          <button className="btn btn-primary" onClick={clearAllFilters}>
+            Clear All Filters
+          </button>
+        </div>
+      ) : (
+        <div className="row g-4">
+          {filteredDoctors.map((doctor) => (
+            <div key={doctor._id} className="col-lg-4 col-md-6">
+              <DoctorCard
+                doctor={doctor}
+                onBookAppointment={handleBookAppointment}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Load More Button (if needed) */}
+      {filteredDoctors.length > 0 &&
+        filteredDoctors.length < doctors.length && (
+          <div className="text-center mt-5">
+            <button className="btn btn-outline-primary">
+              Load More Doctors
+            </button>
+          </div>
+        )}
     </div>
   );
 };
 
 export default SearchDoctorsPage;
- 

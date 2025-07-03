@@ -179,6 +179,24 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showNotifications]);
 
+  useEffect(() => {
+    const handleUserLogin = () => {
+      const token = localStorage.getItem("token");
+      const userTypeFromStorage = localStorage.getItem("userType");
+      const userDataFromStorage = localStorage.getItem("userData");
+
+      if (token && userTypeFromStorage) {
+        setIsLoggedIn(true);
+        setUserType(userTypeFromStorage);
+        if (userDataFromStorage) {
+          setUserData(JSON.parse(userDataFromStorage));
+        }
+      }
+    };
+    window.addEventListener("user-login", handleUserLogin);
+    return () => window.removeEventListener("user-login", handleUserLogin);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userType");
@@ -223,7 +241,7 @@ const Header = () => {
       style={{
         minHeight: 80,
         position: "sticky",
-      top: 0,
+        top: 0,
         zIndex: 1000,
         background: "#fff",
         boxShadow: isScrolled
@@ -251,7 +269,7 @@ const Header = () => {
             }}
           />
           <span style={gradientStyle}>MIQAT</span>
-          </Link>
+        </Link>
         {/* Spacer to push nav links to the right */}
         <div style={{ flex: 1 }} />
         {/* Nav Links */}
@@ -283,7 +301,7 @@ const Header = () => {
               }}
             >
               {link.label}
-          </Link>
+            </Link>
           ))}
         </nav>
         {/* User Dropdown or Auth Buttons */}

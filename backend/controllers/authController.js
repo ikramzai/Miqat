@@ -40,32 +40,54 @@ const protect = async (req, res, next) => {
 };
 
 exports.loginUser = async (req, res) => {
-  // ... existing code ...
-  console.log(
-    "[DEBUG] loginUser: Checking for existing welcome notification for user",
-    user._id
-  );
-  const existingWelcome = await Notification.findOne({
-    user: user._id,
-    type: "welcome",
-  });
-  if (!existingWelcome) {
-    console.log(
-      "[DEBUG] loginUser: Creating welcome notification for user",
-      user._id
-    );
+  const { email, password, role } = req.body;
+  let user = null;
+  let Model = null;
+
+  if (role === "doctor") {
+    Model = Doctor;
+  } else if (role === "patient") {
+    Model = Patient;
+  } else {
+    return res.status(400).json({ message: "Invalid role" });
+  }
+
+  user = await Model.findOne({ email });
+  if (!user) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const isMatch = await user.matchPassword(password);
+  if (!isMatch) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  // Check for first login and create welcome notification
+  if (!user.hasLoggedInBefore) {
     await createNotification({
       user: user._id,
-      message: `Welcome back, ${user.name || "User"}!`,
+      userType: role,
+      message: "👋 Welcome to Miqat! We're glad to have you.",
       type: "welcome",
     });
-  } else {
-    console.log(
-      "[DEBUG] loginUser: Welcome notification already exists for user",
-      user._id
-    );
+    user.hasLoggedInBefore = true;
+    await user.save();
   }
-  // ... existing code ...
+
+  // Generate JWT
+  const token = jwt.sign({ id: user._id, role }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  // Return user info (excluding password) and token
+  const userObj = user.toObject();
+  delete userObj.password;
+
+  res.json({
+    user: userObj,
+    token,
+    role,
+  });
 };
 
 module.exports = { protect };

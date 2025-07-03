@@ -12,6 +12,7 @@ const doctorSchema = new mongoose.Schema(
     phone: String,
     profilePicture: String,
     availableSlots: [{ type: Date }],
+    hasLoggedInBefore: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

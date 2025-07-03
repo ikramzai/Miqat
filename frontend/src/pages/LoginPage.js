@@ -61,12 +61,13 @@ const LoginPage = () => {
         })
       );
 
+      window.dispatchEvent(new Event("user-login"));
+
       if (formData.userType === "doctor") {
         navigate("/doctor");
       } else {
         navigate("/patient");
       }
-      window.location.reload();
     } catch (err) {
       console.error("❌ Login failed:", err);
       if (err.response?.status === 401) {
@@ -89,7 +90,7 @@ const LoginPage = () => {
     <div
       className="min-vh-100 d-flex align-items-center"
       style={{
-        background: "linear-gradient(90deg, #4fd1c5 0%, #2563eb 100%)",
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         padding: "2rem 0",
       }}
     >

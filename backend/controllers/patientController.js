@@ -51,17 +51,15 @@ exports.loginPatient = async (req, res) => {
   try {
     const patient = await Patient.findOne({ email });
     if (patient && (await patient.matchPassword(password))) {
-      // Welcome notification on first login
-      const existingWelcome = await Notification.findOne({
-        user: patient._id,
-        type: "welcome",
-      });
-      if (!existingWelcome) {
+      if (!patient.hasLoggedInBefore) {
         await createNotification({
           user: patient._id,
-          message: `Welcome back, ${patient.name || "User"}!`,
+          userType: "patient",
+          message: "👋 Welcome to Miqat! We're glad to have you.",
           type: "welcome",
         });
+        patient.hasLoggedInBefore = true;
+        await patient.save();
       }
       res.json({
         _id: patient._id,
@@ -105,7 +103,14 @@ exports.getPatientProfile = async (req, res) => {
     const patient = await Patient.findById(req.user._id);
     if (!patient) return res.status(404).json({ message: "Patient not found" });
 
-    res.json(patient);
+    res.json({
+      _id: patient._id,
+      name: patient.name,
+      email: patient.email,
+      phone: patient.phone,
+      location: patient.location,
+      profilePicture: patient.profilePicture,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching profile", error });
   }
@@ -113,15 +118,19 @@ exports.getPatientProfile = async (req, res) => {
 
 // Update Patient Profile
 exports.updatePatientProfile = async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, location } = req.body;
 
   try {
     const patient = await Patient.findById(req.user._id);
     if (!patient) return res.status(404).json({ message: "Patient not found" });
 
-    patient.name = name || patient.name;
-    patient.email = email || patient.email;
-    patient.phone = phone || patient.phone;
+    // Update fields only if provided
+    if (name !== undefined) patient.name = name;
+    if (email !== undefined) patient.email = email;
+    if (phone !== undefined) patient.phone = phone;
+    if (location !== undefined) patient.location = location;
+
+    // Handle profile picture upload
     if (req.file) {
       patient.profilePicture = `/uploads/${req.file.filename}`;
     }
@@ -132,10 +141,12 @@ exports.updatePatientProfile = async (req, res) => {
       name: updated.name,
       email: updated.email,
       phone: updated.phone,
+      location: updated.location,
       profilePicture: updated.profilePicture,
     });
   } catch (error) {
-    res.status(500).json({ message: "Update failed", error });
+    console.error("❌ Patient profile update error:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
   }
 };
 

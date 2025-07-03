@@ -51,29 +51,15 @@ exports.loginDoctor = async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ email });
     if (doctor && (await doctor.matchPassword(password))) {
-      console.log(
-        "[DEBUG] loginDoctor: Checking for existing welcome notification for doctor",
-        doctor._id
-      );
-      const existingWelcome = await Notification.findOne({
-        user: doctor._id,
-        type: "welcome",
-      });
-      if (!existingWelcome) {
-        console.log(
-          "[DEBUG] loginDoctor: Creating welcome notification for doctor",
-          doctor._id
-        );
+      if (!doctor.hasLoggedInBefore) {
         await createNotification({
           user: doctor._id,
-          message: `Welcome back, ${doctor.name || "Doctor"}!`,
+          userType: "doctor",
+          message: "👋 Welcome to Miqat! We're glad to have you.",
           type: "welcome",
         });
-      } else {
-        console.log(
-          "[DEBUG] loginDoctor: Welcome notification already exists for doctor",
-          doctor._id
-        );
+        doctor.hasLoggedInBefore = true;
+        await doctor.save();
       }
       res.json({
         _id: doctor._id,
@@ -125,13 +111,16 @@ exports.updateDoctorProfile = async (req, res) => {
       ? doctor.availableSlots.map((d) => d.toISOString())
       : [];
 
-    doctor.name = name || doctor.name;
-    doctor.email = email || doctor.email;
-    doctor.specialty = specialty || doctor.specialty;
-    doctor.location = location || doctor.location;
-    doctor.fees = fees || doctor.fees;
-    doctor.phone = phone || doctor.phone;
+    // Update fields only if provided
+    if (name !== undefined) doctor.name = name;
+    if (email !== undefined) doctor.email = email;
+    if (specialty !== undefined) doctor.specialty = specialty;
+    if (location !== undefined) doctor.location = location;
+    if (fees !== undefined) doctor.fees = fees;
+    if (phone !== undefined) doctor.phone = phone;
     if (availableSlots) doctor.availableSlots = availableSlots;
+
+    // Handle profile picture upload
     if (req.file) {
       doctor.profilePicture = `/uploads/${req.file.filename}`;
     }
@@ -152,6 +141,7 @@ exports.updateDoctorProfile = async (req, res) => {
       for (const appt of futureAppointments) {
         await createNotification({
           user: appt.patient._id,
+          userType: "patient",
           message: `Doctor ${doctor.name}'s availability has changed. Please review your upcoming appointment(s).`,
           type: "availability_changed",
           relatedEntity: appt._id,
@@ -170,7 +160,8 @@ exports.updateDoctorProfile = async (req, res) => {
       phone: updated.phone,
     });
   } catch (error) {
-    res.status(500).json({ message: "Update failed", error });
+    console.error("❌ Doctor profile update error:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
   }
 };
 

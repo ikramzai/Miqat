@@ -80,17 +80,19 @@ exports.createAppointment = async (req, res) => {
     // Notify doctor of new appointment
     await createNotification({
       user: doctorExists._id,
-      message: `New appointment booked by ${
+      userType: "doctor",
+      message: `📅 New appointment booked with ${
         req.user.name || "a patient"
       } on ${date} at ${time}.`,
       type: "appointment_booked",
       relatedEntity: appointment._id,
     });
 
-    // Optionally, notify patient of successful booking
+    // Notify patient of successful booking
     await createNotification({
       user: patient,
-      message: `Your appointment with Dr. ${doctorExists.name} is booked for ${date} at ${time}.`,
+      userType: "patient",
+      message: `✅ Appointment with Dr. ${doctorExists.name} confirmed for ${date} at ${time}.`,
       type: "appointment_booked",
       relatedEntity: appointment._id,
     });
@@ -244,28 +246,42 @@ exports.updateAppointmentStatus = async (req, res) => {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    // Notify patient and doctor of status change
-    const statusMsg =
-      status === "confirmed"
-        ? "confirmed"
-        : status === "cancelled"
-        ? "cancelled"
-        : "updated";
+    let statusMsg = "updated";
+    let patientMsg = "";
+    let doctorMsg = "";
+    if (status === "confirmed") {
+      statusMsg = "confirmed";
+      patientMsg = `✔️ Dr. ${
+        appointment.doctor.name
+      } confirmed your appointment for ${appointment.date.toDateString()}.`;
+      doctorMsg = `You confirmed the appointment with ${
+        appointment.patient.name
+      } on ${appointment.date.toDateString()} at ${appointment.time}.`;
+    } else if (status === "cancelled") {
+      statusMsg = "cancelled";
+      patientMsg = `❌ Your appointment with Dr. ${appointment.doctor.name} was cancelled.`;
+      doctorMsg = `❌ Appointment with ${appointment.patient.name} was cancelled.`;
+    } else {
+      patientMsg = `Your appointment on ${appointment.date.toDateString()} at ${
+        appointment.time
+      } was updated.`;
+      doctorMsg = `Appointment with ${
+        appointment.patient.name
+      } on ${appointment.date.toDateString()} at ${
+        appointment.time
+      } was updated.`;
+    }
     await createNotification({
       user: appointment.patient._id,
-      message: `Your appointment on ${appointment.date.toDateString()} at ${
-        appointment.time
-      } has been ${statusMsg}.`,
+      userType: "patient",
+      message: patientMsg,
       type: `appointment_${statusMsg}`,
       relatedEntity: appointment._id,
     });
     await createNotification({
       user: appointment.doctor._id,
-      message: `Appointment with ${
-        appointment.patient.name
-      } on ${appointment.date.toDateString()} at ${
-        appointment.time
-      } has been ${statusMsg}.`,
+      userType: "doctor",
+      message: doctorMsg,
       type: `appointment_${statusMsg}`,
       relatedEntity: appointment._id,
     });
@@ -344,14 +360,16 @@ exports.sendAppointmentReminders = async () => {
     // Notify patient
     await createNotification({
       user: appt.patient._id,
-      message: `Reminder: Your appointment with Dr. ${appt.doctor.name} is at ${appt.time} today.`,
+      userType: "patient",
+      message: `⏰ You have an appointment tomorrow at ${appt.time}.`,
       type: "appointment_reminder",
       relatedEntity: appt._id,
     });
     // Notify doctor
     await createNotification({
       user: appt.doctor._id,
-      message: `Reminder: You have an appointment with ${appt.patient.name} at ${appt.time} today.`,
+      userType: "doctor",
+      message: `⏰ You have an appointment with ${appt.patient.name} tomorrow at ${appt.time}.`,
       type: "appointment_reminder",
       relatedEntity: appt._id,
     });
