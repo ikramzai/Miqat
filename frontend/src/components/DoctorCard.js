@@ -53,6 +53,32 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
     if (onBookAppointment) {
       onBookAppointment(doctor);
     } else {
+      // Check if user is logged in
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+
+      if (!token) {
+        if (window.showToast) {
+          window.showToast(
+            "Please log in as a patient to book an appointment",
+            "warning"
+          );
+        }
+        // Store the intended booking destination
+        localStorage.setItem("redirectAfterLogin", `/booking/${doctor._id}`);
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
+        return;
+      }
+
+      if (userType !== "patient") {
+        if (window.showToast) {
+          window.showToast("Only patients can book appointments", "warning");
+        }
+        return;
+      }
+
       navigate(`/booking/${doctor._id}`);
     }
   };

@@ -59,15 +59,32 @@ const BookingPage = () => {
 
   useEffect(() => {
     if (!token) {
+      if (window.showToast) {
+        window.showToast("Please log in to book an appointment", "warning");
+      }
       navigate("/login");
       return;
     }
     if (userType !== "patient") {
+      if (window.showToast) {
+        window.showToast("Only patients can book appointments", "warning");
+      }
       navigate("/doctor");
       return;
     }
     fetchDoctorData();
   }, [token, userType, navigate, doctorId]);
+
+  // Listen for profile updates and re-fetch doctor data
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      fetchDoctorData();
+    };
+    window.addEventListener("profile-updated", handleProfileUpdate);
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
+  }, [doctorId]);
 
   const fetchDoctorData = async () => {
     try {

@@ -68,6 +68,21 @@ const DoctorDashboard = () => {
     }
   }, [token, userType, navigate]);
 
+  // Listen for profile updates
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      if (event.detail && event.detail.userData) {
+        setDoctor(event.detail.userData);
+      }
+    };
+
+    window.addEventListener("profile-updated", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
+  }, []);
+
   // Toggle availability
   const toggleAvailability = async () => {
     try {

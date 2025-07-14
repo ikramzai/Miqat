@@ -11,7 +11,7 @@ import AppointmentsPage from "./pages/AppointmentsPage";
 import ProfilePage from "./pages/ProfilePage";
 import BookingPage from "./pages/BookingPage";
 import ToastContainer from "./components/ToastContainer";
-import React from "react";
+import React, { useEffect } from "react";
 
 const AppointmentDetails = () => (
   <div className="container mt-5 text-center">
@@ -21,6 +21,25 @@ const AppointmentDetails = () => (
 );
 
 function App() {
+  // Global event listener for profile updates
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      // Update localStorage with new user data
+      if (event.detail?.userData) {
+        localStorage.setItem("userData", JSON.stringify(event.detail.userData));
+      }
+
+      // Force refresh all images by dispatching a custom event
+      window.dispatchEvent(new CustomEvent("refresh-images"));
+    };
+
+    window.addEventListener("profile-updated", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
+  }, []);
+
   return (
     <Router>
       <Layout>

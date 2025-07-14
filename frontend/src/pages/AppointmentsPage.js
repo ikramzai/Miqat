@@ -43,6 +43,17 @@ const AppointmentsPage = () => {
     fetchAppointments();
   }, [token, navigate]);
 
+  // Listen for profile updates and re-fetch appointments
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      fetchAppointments();
+    };
+    window.addEventListener("profile-updated", handleProfileUpdate);
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
+  }, []);
+
   const fetchAppointments = async () => {
     try {
       setLoading(true);

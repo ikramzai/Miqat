@@ -21,7 +21,7 @@ import {
   MdInfo,
   MdDashboard,
 } from "react-icons/md";
-import defaultUserImg from "../assets/default-user.png";
+import { getImageUrl, handleImageError } from "../utils/imageUtils";
 import Notifications from "./Notifications";
 import { fetchNotifications, markNotificationAsRead } from "../services/api";
 
@@ -58,6 +58,7 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null);
+  const mobileMenuRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -193,8 +194,19 @@ const Header = () => {
         }
       }
     };
+
+    const handleRefreshImages = () => {
+      // Force re-render by updating state
+      setUserData((prevData) => ({ ...prevData }));
+    };
+
     window.addEventListener("user-login", handleUserLogin);
-    return () => window.removeEventListener("user-login", handleUserLogin);
+    window.addEventListener("refresh-images", handleRefreshImages);
+
+    return () => {
+      window.removeEventListener("user-login", handleUserLogin);
+      window.removeEventListener("refresh-images", handleRefreshImages);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -235,6 +247,10 @@ const Header = () => {
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <header
       className="navbar navbar-expand-lg navbar-light shadow-sm py-2"
@@ -270,9 +286,8 @@ const Header = () => {
           />
           <span style={gradientStyle}>MIQAT</span>
         </Link>
-        {/* Spacer to push nav links to the right */}
-        <div style={{ flex: 1 }} />
-        {/* Nav Links */}
+
+        {/* Desktop Navigation */}
         <nav
           className="d-none d-lg-flex align-items-center gap-4"
           style={{ marginRight: 24 }}
@@ -304,8 +319,9 @@ const Header = () => {
             </Link>
           ))}
         </nav>
-        {/* User Dropdown or Auth Buttons */}
-        <div className="d-flex align-items-center gap-3 ms-3 position-relative">
+
+        {/* Desktop User Section */}
+        <div className="d-none d-lg-flex align-items-center gap-3 ms-3 position-relative">
           {isLoggedIn && (
             <div style={{ position: "relative" }} ref={notificationsRef}>
               <button
@@ -376,19 +392,13 @@ const Header = () => {
                 id="userDropdown"
               >
                 <img
-                  src={
-                    userData?.profilePicture
-                      ? `${
-                          process.env.REACT_APP_API_BASE_URL ||
-                          "http://localhost:5000"
-                        }${userData.profilePicture}`
-                      : defaultUserImg
-                  }
+                  src={getImageUrl(userData?.profilePicture)}
                   alt="Profile"
                   className="rounded-circle"
                   width="32"
                   height="32"
                   style={{ objectFit: "cover", border: "1px solid #e3eafc" }}
+                  onError={handleImageError}
                 />
                 <span className="d-none d-md-inline">
                   {userData?.name?.split(" ")[0] || "Account"}
@@ -399,154 +409,241 @@ const Header = () => {
                 <ul
                   className="dropdown-menu show mt-2 shadow"
                   style={{
-                    right: 0,
-                    left: "auto",
-                    minWidth: 220,
-                    borderRadius: 16,
-                    boxShadow: "0 4px 24px rgba(42,125,225,0.10)",
-                    padding: 0,
-                    border: "1px solid #e3eafc",
-                    background: "#fff",
-                    overflow: "hidden",
+                    minWidth: "200px",
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
                   }}
-                  aria-labelledby="userDropdown"
                 >
                   <li>
                     <button
-                      className="dropdown-item d-flex align-items-center gap-2"
-                      style={{
-                        padding: "14px 20px",
-                        fontWeight: 600,
-                        fontSize: 15,
-                        borderBottom: "1px solid #f0f4fa",
-                        background: "none",
-                        transition: "background 0.2s",
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "#eaf2ff")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "none")
-                      }
-                      onClick={handleProfile}
-                    >
-                      <FaUser /> Profile
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="dropdown-item d-flex align-items-center gap-2"
-                      style={{
-                        padding: "14px 20px",
-                        fontWeight: 600,
-                        fontSize: 15,
-                        borderBottom: "1px solid #f0f4fa",
-                        background: "none",
-                        transition: "background 0.2s",
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "#eaf2ff")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "none")
-                      }
+                      className="dropdown-item d-flex align-items-center gap-2 py-2"
                       onClick={handleDashboard}
                     >
-                      <FaTachometerAlt /> Dashboard
+                      <MdDashboard size={18} />
+                      Dashboard
                     </button>
                   </li>
                   <li>
                     <button
-                      className="dropdown-item d-flex align-items-center gap-2"
-                      style={{
-                        padding: "14px 20px",
-                        fontWeight: 600,
-                        fontSize: 15,
-                        borderBottom: "1px solid #f0f4fa",
-                        background: "none",
-                        transition: "background 0.2s",
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "#eaf2ff")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "none")
-                      }
+                      className="dropdown-item d-flex align-items-center gap-2 py-2"
                       onClick={handleAppointments}
                     >
-                      <FaCalendarAlt /> Appointments
+                      <FaCalendarAlt size={16} />
+                      Appointments
                     </button>
                   </li>
                   <li>
-                    <hr
-                      className="dropdown-divider"
-                      style={{ margin: 0, borderColor: "#e3eafc" }}
-                    />
+                    <button
+                      className="dropdown-item d-flex align-items-center gap-2 py-2"
+                      onClick={handleProfile}
+                    >
+                      <FaUser size={16} />
+                      Profile
+                    </button>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
                   </li>
                   <li>
                     <button
-                      className="dropdown-item d-flex align-items-center gap-2 text-danger"
-                      style={{
-                        padding: "14px 20px",
-                        fontWeight: 600,
-                        fontSize: 15,
-                        background: "none",
-                        transition: "background 0.2s",
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "#ffeaea")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "none")
-                      }
+                      className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger"
                       onClick={handleLogout}
                     >
-                      <FaSignOutAlt /> Logout
+                      <FaSignOutAlt size={16} />
+                      Logout
                     </button>
                   </li>
                 </ul>
               )}
             </div>
           ) : (
-            <>
+            <div className="d-flex gap-2">
               <Link
                 to="/login"
-                className="btn px-4 py-2 fw-bold"
-                style={{
-                  borderRadius: 30,
-                  fontSize: "1.05rem",
-                  border: "1.5px solid #2563eb",
-                  color: "#2563eb",
-                  background: "#fff",
-                  boxShadow: "0 2px 8px rgba(42,125,225,0.06)",
-                  marginRight: 4,
-                  fontWeight: 700,
-                  transition: "all 0.2s",
-                }}
+                className="btn btn-gradient px-3 py-2 fw-semibold"
+                style={{ borderRadius: "12px" }}
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="btn px-4 py-2 fw-bold"
-                style={{
-                  borderRadius: 30,
-                  fontSize: "1.05rem",
-                  background:
-                    "linear-gradient(90deg, #2563eb 0%, #4fd1c5 100%)",
-                  color: "#fff",
-                  border: "none",
-                  boxShadow: "0 4px 16px rgba(42,125,225,0.10)",
-                  fontWeight: 700,
-                  transition: "all 0.2s",
-                }}
+                className="btn btn-gradient px-3 py-2 fw-semibold"
+                style={{ borderRadius: "12px" }}
               >
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
+        <div className="d-lg-none">
+          <button
+            className="btn btn-link p-2"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+            style={{ fontSize: "1.5rem", color: "#2563eb" }}
+          >
+            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          ref={mobileMenuRef}
+          className="d-lg-none"
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            background: "#fff",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+            borderTop: "1px solid #e3eafc",
+            zIndex: 1001,
+          }}
+        >
+          <div className="container py-3">
+            {/* Mobile Navigation Links */}
+            <div className="mb-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`d-block py-3 px-3 rounded fw-semibold text-decoration-none ${
+                    location.pathname === link.to ? "active" : ""
+                  }`}
+                  style={{
+                    color: location.pathname === link.to ? "#2563eb" : "#333",
+                    background:
+                      location.pathname === link.to ? "#eaf2ff" : "transparent",
+                    marginBottom: "0.5rem",
+                    borderRadius: "12px",
+                    fontSize: "1.1rem",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile User Section */}
+            {isLoggedIn ? (
+              <div className="border-top pt-3">
+                {/* Notifications */}
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <span className="fw-semibold text-muted">Notifications</span>
+                  <button
+                    className="btn btn-link p-2 position-relative"
+                    onClick={() => setShowNotifications((prev) => !prev)}
+                    aria-label="Show notifications"
+                  >
+                    <FaBell size={20} color="#2563eb" />
+                    {unreadCount > 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          background: "#e53e3e",
+                          color: "#fff",
+                          borderRadius: "50%",
+                          fontSize: 10,
+                          minWidth: 16,
+                          height: 16,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {unreadCount}
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* User Profile */}
+                <div
+                  className="d-flex align-items-center gap-3 mb-3 p-3 rounded"
+                  style={{ background: "#f8faff" }}
+                >
+                  <img
+                    src={getImageUrl(userData?.profilePicture)}
+                    alt="Profile"
+                    className="rounded-circle"
+                    width="48"
+                    height="48"
+                    style={{ objectFit: "cover", border: "2px solid #e3eafc" }}
+                    onError={handleImageError}
+                  />
+                  <div>
+                    <div className="fw-bold">{userData?.name || "User"}</div>
+                    <small className="text-muted">{userType}</small>
+                  </div>
+                </div>
+
+                {/* Mobile Menu Items */}
+                <div className="d-grid gap-2">
+                  <button
+                    className="btn btn-outline-primary d-flex align-items-center gap-2 py-3"
+                    onClick={handleDashboard}
+                    style={{ borderRadius: "12px" }}
+                  >
+                    <MdDashboard size={18} />
+                    Dashboard
+                  </button>
+                  <button
+                    className="btn btn-outline-primary d-flex align-items-center gap-2 py-3"
+                    onClick={handleAppointments}
+                    style={{ borderRadius: "12px" }}
+                  >
+                    <FaCalendarAlt size={16} />
+                    Appointments
+                  </button>
+                  <button
+                    className="btn btn-outline-primary d-flex align-items-center gap-2 py-3"
+                    onClick={handleProfile}
+                    style={{ borderRadius: "12px" }}
+                  >
+                    <FaUser size={16} />
+                    Profile
+                  </button>
+                  <button
+                    className="btn btn-outline-danger d-flex align-items-center gap-2 py-3"
+                    onClick={handleLogout}
+                    style={{ borderRadius: "12px" }}
+                  >
+                    <FaSignOutAlt size={16} />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="d-grid gap-2 mt-3">
+                <Link
+                  to="/login"
+                  className="btn btn-gradient py-3 fw-semibold"
+                  style={{ borderRadius: "12px" }}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="btn btn-gradient py-3 fw-semibold"
+                  style={{ borderRadius: "12px" }}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

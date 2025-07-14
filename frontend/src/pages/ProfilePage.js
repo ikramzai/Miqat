@@ -13,7 +13,7 @@ import {
   FaStethoscope,
   FaCalendarAlt,
 } from "react-icons/fa";
-import defaultUserImg from "../assets/default-user.png";
+import { getImageUrl, handleImageError } from "../utils/imageUtils";
 
 const API_BASE_URL = "http://localhost:5000"; // adjust if needed
 
@@ -222,6 +222,26 @@ const ProfilePage = () => {
       setSelectedFile(null);
       setIsEditing(false);
       setSuccess("Profile updated successfully!");
+
+      // Update localStorage with new user data
+      localStorage.setItem("userData", JSON.stringify(res.data));
+
+      // Trigger a custom event to notify other components
+      window.dispatchEvent(
+        new CustomEvent("profile-updated", {
+          detail: { userData: res.data },
+        })
+      );
+
+      // Show toast notification
+      if (window.showToast) {
+        window.showToast("Profile updated successfully!", "success");
+      }
+
+      // Force refresh the page after a short delay to update all images
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       console.error("Profile update error:", err);
       if (err.response?.data?.message) {
@@ -380,15 +400,14 @@ const ProfilePage = () => {
                     src={
                       selectedFile
                         ? URL.createObjectURL(selectedFile)
-                        : user?.profilePicture
-                        ? `${API_BASE_URL}${user.profilePicture}`
-                        : defaultUserImg
+                        : getImageUrl(user?.profilePicture)
                     }
                     alt="Profile"
                     className="rounded-circle mb-3"
                     width="150"
                     height="150"
                     style={{ objectFit: "cover" }}
+                    onError={handleImageError}
                   />
                   {isEditing && (
                     <div className="mb-3">

@@ -114,7 +114,7 @@ const HomePage = () => {
   const doctors = [
     {
       id: 1,
-      name: "Dr. Sarah Johnson",
+      name: "Dr. Ahmad Al Amiri",
       specialty: "Cardiologist",
       rating: 4.8,
       reviews: 124,
@@ -125,7 +125,7 @@ const HomePage = () => {
     },
     {
       id: 2,
-      name: "Dr. Michael Chen",
+      name: "Dr. Fatima Al Mansouri",
       specialty: "Dermatologist",
       rating: 4.9,
       reviews: 89,
@@ -136,7 +136,7 @@ const HomePage = () => {
     },
     {
       id: 3,
-      name: "Dr. Priya Patel",
+      name: "Dr. Youssef Al Haddad",
       specialty: "Pediatrician",
       rating: 4.7,
       reviews: 156,
@@ -176,7 +176,7 @@ const HomePage = () => {
 
   const testimonials = [
     {
-      name: "John D.",
+      name: "Khalid S.",
       role: "Patient",
       quote:
         "Found the perfect specialist in minutes! The booking process was incredibly smooth and the doctor was excellent.",
@@ -185,7 +185,7 @@ const HomePage = () => {
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
     },
     {
-      name: "Maria S.",
+      name: "Mona A.",
       role: "Patient",
       quote:
         "The booking process was incredibly smooth. I love how easy it is to find and book appointments with qualified doctors.",
@@ -194,7 +194,7 @@ const HomePage = () => {
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      name: "David K.",
+      name: "Ali K.",
       role: "Patient",
       quote:
         "Saved me hours of waiting at the clinic! The online booking system is a game-changer for busy professionals.",
@@ -274,18 +274,26 @@ const HomePage = () => {
         <div className="flex-fill" style={{ maxWidth: 540 }}>
           <h1
             className="fw-bold mb-3"
-            style={{ fontSize: "2.7rem", lineHeight: 1.1 }}
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 2.7rem)",
+              lineHeight: 1.1,
+            }}
           >
             Find local specialists <br /> who can take your{" "}
             <span className="text-primary">insurance</span>
           </h1>
-          <p className="mb-4 text-muted" style={{ fontSize: "1.15rem" }}>
+          <p
+            className="mb-4 text-muted"
+            style={{
+              fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
+            }}
+          >
             We help you find available vaccine appointments near you or notify
             you when availability opens up.
           </p>
-          <div className="d-flex gap-2 mb-3">
+          <div className="d-flex flex-column flex-sm-row gap-2 mb-3">
             <button
-              className="btn btn-primary btn-lg px-5"
+              className="btn btn-gradient btn-lg px-5"
               style={{ borderRadius: 12 }}
               onClick={handleSignUp}
             >
@@ -296,7 +304,7 @@ const HomePage = () => {
         {/* Right: Doctor Image and Abstract Shapes */}
         <div
           className="flex-fill d-flex justify-content-center align-items-center position-relative mt-5 mt-lg-0"
-          style={{ minWidth: 320 }}
+          style={{ minWidth: "clamp(280px, 40vw, 320px)" }}
         >
           {/* Abstract shapes */}
           <div
@@ -304,8 +312,8 @@ const HomePage = () => {
               position: "absolute",
               top: -30,
               right: -30,
-              width: 120,
-              height: 120,
+              width: "clamp(80px, 15vw, 120px)",
+              height: "clamp(80px, 15vw, 120px)",
               background: "#e3f0ff",
               borderRadius: "50%",
               zIndex: 0,
@@ -316,8 +324,8 @@ const HomePage = () => {
               position: "absolute",
               bottom: -20,
               left: -20,
-              width: 80,
-              height: 80,
+              width: "clamp(60px, 10vw, 80px)",
+              height: "clamp(60px, 10vw, 80px)",
               background: "#ffd6e0",
               borderRadius: "50%",
               zIndex: 0,
@@ -326,7 +334,11 @@ const HomePage = () => {
           {/* Doctor card */}
           <div
             className="card shadow-lg p-0"
-            style={{ borderRadius: 24, width: 320, zIndex: 1 }}
+            style={{
+              borderRadius: 24,
+              width: "clamp(280px, 40vw, 320px)",
+              zIndex: 1,
+            }}
           >
             <img
               src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face"
@@ -335,13 +347,25 @@ const HomePage = () => {
               style={{
                 borderTopLeftRadius: 24,
                 borderTopRightRadius: 24,
-                height: 320,
+                height: "clamp(280px, 40vw, 320px)",
                 objectFit: "cover",
               }}
             />
             <div className="p-3 text-center">
-              <span className="fw-bold text-primary">Dr. Jane Doe</span>
-              <div className="text-muted" style={{ fontSize: 14 }}>
+              <span
+                className="fw-bold text-primary"
+                style={{
+                  fontSize: "clamp(0.9rem, 2.5vw, 1rem)",
+                }}
+              >
+                Dr. Noor Al Farsi
+              </span>
+              <div
+                className="text-muted"
+                style={{
+                  fontSize: "clamp(0.8rem, 2vw, 0.875rem)",
+                }}
+              >
                 General Practitioner
               </div>
             </div>
@@ -354,11 +378,16 @@ const HomePage = () => {
         <div className="text-center mb-5">
           <span
             className="text-uppercase text-primary fw-bold"
-            style={{ letterSpacing: 1 }}
+            style={{ letterSpacing: 1, fontSize: "clamp(0.8rem, 2vw, 1rem)" }}
           >
             Patient Solution
           </span>
-          <h2 className="fw-bold mt-2" style={{ fontSize: "2rem" }}>
+          <h2
+            className="fw-bold mt-2"
+            style={{
+              fontSize: "clamp(1.5rem, 4vw, 2rem)",
+            }}
+          >
             4 easy steps to get your Solution
           </h2>
         </div>
@@ -370,8 +399,20 @@ const HomePage = () => {
                 style={{ borderRadius: 18 }}
               >
                 <div className="mb-3">{step.icon}</div>
-                <h5 className="fw-bold mb-2">{step.title}</h5>
-                <p className="text-muted mb-0" style={{ fontSize: 15 }}>
+                <h5
+                  className="fw-bold mb-2"
+                  style={{
+                    fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                  }}
+                >
+                  {step.title}
+                </h5>
+                <p
+                  className="text-muted mb-0"
+                  style={{
+                    fontSize: "clamp(0.875rem, 2vw, 0.9375rem)",
+                  }}
+                >
                   {step.desc}
                 </p>
               </div>
@@ -386,11 +427,19 @@ const HomePage = () => {
           <div className="text-center mb-5">
             <h2
               className="fw-bold mb-3"
-              style={{ color: textDark, fontSize: "2.5rem" }}
+              style={{
+                color: textDark,
+                fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
+              }}
             >
               Medical Specialties
             </h2>
-            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+            <p
+              className="lead text-muted"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+              }}
+            >
               Find specialists in every field of medicine
             </p>
           </div>
@@ -421,18 +470,22 @@ const HomePage = () => {
                     <div
                       className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                       style={{
-                        width: "70px",
-                        height: "70px",
+                        width: "clamp(60px, 15vw, 80px)",
+                        height: "clamp(60px, 15vw, 80px)",
                         backgroundColor: `${specialty.color}20`,
                         color: specialty.color,
-                        transition: "all 0.3s ease",
+                        fontSize: "clamp(1.5rem, 4vw, 2rem)",
                       }}
                     >
-                      <span style={{ fontSize: "1.5rem" }}>
-                        {specialty.icon}
-                      </span>
+                      {specialty.icon}
                     </div>
-                    <h5 className="fw-bold mb-2" style={{ color: textDark }}>
+                    <h5
+                      className="fw-bold"
+                      style={{
+                        color: specialty.color,
+                        fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                      }}
+                    >
                       {specialty.name}
                     </h5>
                   </div>
@@ -449,11 +502,19 @@ const HomePage = () => {
           <div className="text-center mb-5">
             <h2
               className="fw-bold mb-3"
-              style={{ color: textDark, fontSize: "2.5rem" }}
+              style={{
+                color: textDark,
+                fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
+              }}
             >
               Why Choose MiQat?
             </h2>
-            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+            <p
+              className="lead text-muted"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+              }}
+            >
               Experience healthcare booking like never before
             </p>
           </div>
@@ -469,18 +530,31 @@ const HomePage = () => {
                     <div
                       className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
                       style={{
-                        width: "80px",
-                        height: "80px",
+                        width: "clamp(60px, 15vw, 80px)",
+                        height: "clamp(60px, 15vw, 80px)",
                         backgroundColor: `${feature.color}20`,
                         color: feature.color,
                       }}
                     >
                       {feature.icon}
                     </div>
-                    <h5 className="fw-bold mb-3" style={{ color: textDark }}>
+                    <h5
+                      className="fw-bold mb-3"
+                      style={{
+                        color: textDark,
+                        fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                      }}
+                    >
                       {feature.title}
                     </h5>
-                    <p className="text-muted mb-0">{feature.description}</p>
+                    <p
+                      className="text-muted mb-0"
+                      style={{
+                        fontSize: "clamp(0.875rem, 2vw, 1rem)",
+                      }}
+                    >
+                      {feature.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -495,11 +569,19 @@ const HomePage = () => {
           <div className="text-center mb-5">
             <h2
               className="fw-bold mb-3"
-              style={{ color: textDark, fontSize: "2.5rem" }}
+              style={{
+                color: textDark,
+                fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
+              }}
             >
               What Our Patients Say
             </h2>
-            <p className="lead text-muted" style={{ fontSize: "1.2rem" }}>
+            <p
+              className="lead text-muted"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+              }}
+            >
               Real experiences from our community
             </p>
           </div>
@@ -517,7 +599,10 @@ const HomePage = () => {
                     </div>
                     <p
                       className="text-muted mb-4"
-                      style={{ fontStyle: "italic" }}
+                      style={{
+                        fontStyle: "italic",
+                        fontSize: "clamp(0.875rem, 2vw, 1rem)",
+                      }}
                     >
                       "{testimonial.quote}"
                     </p>
@@ -533,11 +618,21 @@ const HomePage = () => {
                       <div>
                         <h6
                           className="fw-bold mb-0"
-                          style={{ color: textDark }}
+                          style={{
+                            color: textDark,
+                            fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                          }}
                         >
                           {testimonial.name}
                         </h6>
-                        <small className="text-muted">{testimonial.role}</small>
+                        <small
+                          className="text-muted"
+                          style={{
+                            fontSize: "clamp(0.8rem, 1.8vw, 0.875rem)",
+                          }}
+                        >
+                          {testimonial.role}
+                        </small>
                       </div>
                     </div>
                   </div>
@@ -552,33 +647,44 @@ const HomePage = () => {
       <section
         className="py-5"
         style={{
-          background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-          color: white,
+          background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
         }}
       >
-        <div className="container text-center">
-          <h2 className="fw-bold mb-3" style={{ fontSize: "2.5rem" }}>
-            Ready to Get Started?
-          </h2>
-          <p className="lead mb-4" style={{ fontSize: "1.2rem", opacity: 0.9 }}>
-            Join thousands of patients who trust MiQat for their healthcare
-            needs
-          </p>
-          <div className="d-flex gap-3 justify-content-center flex-wrap">
-            <button
-              className="btn btn-light btn-lg px-4 py-3 fw-semibold"
-              onClick={handleSignUp}
-              style={{ borderRadius: "10px" }}
+        <div className="container">
+          <div className="text-center">
+            <h2
+              className="fw-bold mb-3 text-white"
+              style={{
+                fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
+              }}
             >
-              Sign Up Now <FaArrowRight className="ms-2" />
-            </button>
-            <button
-              className="btn btn-outline-light btn-lg px-4 py-3 fw-semibold"
-              onClick={() => navigate("/search")}
-              style={{ borderRadius: "10px" }}
+              Ready to Get Started?
+            </h2>
+            <p
+              className="lead text-white-50 mb-4"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+              }}
             >
-              Find a Doctor
-            </button>
+              Join thousands of patients who trust MiQat for their healthcare
+              needs
+            </p>
+            <div className="d-flex gap-3 justify-content-center flex-wrap">
+              <button
+                className="btn btn-light btn-lg px-5 fw-bold"
+                style={{ borderRadius: 12 }}
+                onClick={handleSignUp}
+              >
+                Sign Up Now
+              </button>
+              <button
+                className="btn btn-outline-light btn-lg px-5 fw-bold"
+                style={{ borderRadius: 12 }}
+                onClick={() => navigate("/search")}
+              >
+                Find Doctors
+              </button>
+            </div>
           </div>
         </div>
       </section>

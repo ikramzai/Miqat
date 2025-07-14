@@ -17,7 +17,7 @@ import {
   FaHeart,
   FaRegHeart,
 } from "react-icons/fa";
-import defaultUserImg from "../assets/default-user.png";
+import { getImageUrl, handleImageError } from "../utils/imageUtils";
 
 const DoctorProfilePage = () => {
   const { id } = useParams();
@@ -73,28 +73,40 @@ const DoctorProfilePage = () => {
     },
   ];
 
+  const fetchDoctorData = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await axios.get(`/api/doctors/${id}`);
+      setDoctor(response.data);
+      setReviews(mockReviews); // In real app, fetch from backend
+
+      // Set today's date as default
+      const today = new Date().toISOString().split("T")[0];
+      setSelectedDate(today);
+    } catch (err) {
+      console.error("Error fetching doctor data:", err);
+      setError("Failed to load doctor profile. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchDoctorData = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response = await axios.get(`/api/doctors/${id}`);
-        setDoctor(response.data);
-        setReviews(mockReviews); // In real app, fetch from backend
-
-        // Set today's date as default
-        const today = new Date().toISOString().split("T")[0];
-        setSelectedDate(today);
-      } catch (err) {
-        console.error("Error fetching doctor data:", err);
-        setError("Failed to load doctor profile. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDoctorData();
+  }, [id]);
+
+  // Listen for profile updates and re-fetch doctor data
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      // Only re-fetch if the updated profile matches this doctor
+      fetchDoctorData();
+    };
+    window.addEventListener("profile-updated", handleProfileUpdate);
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
   }, [id]);
 
   const handleBookAppointment = () => {
@@ -180,7 +192,7 @@ const DoctorProfilePage = () => {
           <div className="card shadow-sm">
             <div className="card-body text-center">
               <img
-                src={doctor.image ? doctor.image : defaultUserImg}
+                src={getImageUrl(doctor.profilePicture)}
                 alt={
                   doctor.name
                     ? `Profile of Dr. ${doctor.name}`
@@ -190,6 +202,7 @@ const DoctorProfilePage = () => {
                 width="200"
                 height="200"
                 style={{ objectFit: "cover" }}
+                onError={handleImageError}
               />
 
               <h3 className="card-title">{doctor.name}</h3>

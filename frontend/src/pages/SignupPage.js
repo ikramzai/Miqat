@@ -118,7 +118,7 @@ const SignupPage = () => {
       className="min-vh-100 d-flex align-items-center"
       style={{
         background: "linear-gradient(90deg, #4fd1c5 0%, #2563eb 100%)",
-        padding: "2rem 0",
+        padding: "clamp(1rem, 3vw, 2rem) 0",
       }}
     >
       <div className="container">
@@ -128,10 +128,22 @@ const SignupPage = () => {
               className="card shadow-lg border-0"
               style={{ borderRadius: "20px", overflow: "hidden" }}
             >
-              <div className="p-5">
+              <div className="p-4 p-md-5">
                 <div className="text-center mb-4">
-                  <h3 className="fw-bold text-primary mb-2">Create Account</h3>
-                  <p className="text-muted">
+                  <h3
+                    className="fw-bold text-primary mb-2"
+                    style={{
+                      fontSize: "clamp(1.5rem, 4vw, 2rem)",
+                    }}
+                  >
+                    Create Account
+                  </h3>
+                  <p
+                    className="text-muted"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                    }}
+                  >
                     Join our healthcare community today
                   </p>
                 </div>
@@ -161,10 +173,15 @@ const SignupPage = () => {
                 <form onSubmit={handleSubmit}>
                   {/* User Type Selection */}
                   <div className="mb-4">
-                    <label className="form-label fw-semibold text-muted">
+                    <label
+                      className="form-label fw-semibold text-muted"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                      }}
+                    >
                       I want to register as:
                     </label>
-                    <div className="d-flex gap-2">
+                    <div className="d-flex flex-column flex-sm-row gap-2">
                       <button
                         type="button"
                         className={`flex-fill btn ${
@@ -178,7 +195,11 @@ const SignupPage = () => {
                             userType: "patient",
                           }))
                         }
-                        style={{ transition: "all 0.3s ease" }}
+                        style={{
+                          transition: "all 0.3s ease",
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         <FaPatient className="me-2" />
                         Patient
@@ -196,7 +217,11 @@ const SignupPage = () => {
                             userType: "doctor",
                           }))
                         }
-                        style={{ transition: "all 0.3s ease" }}
+                        style={{
+                          transition: "all 0.3s ease",
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         <FaUserMd className="me-2" />
                         Doctor
@@ -210,6 +235,9 @@ const SignupPage = () => {
                       <label
                         htmlFor="firstName"
                         className="form-label fw-semibold text-muted"
+                        style={{
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         First Name
                       </label>
@@ -221,7 +249,7 @@ const SignupPage = () => {
                           type="text"
                           className="form-control border-start-0"
                           id="firstName"
-                          placeholder="John"
+                          placeholder="Ahmad"
                           value={formData.firstName}
                           onChange={(e) =>
                             setFormData({
@@ -230,7 +258,11 @@ const SignupPage = () => {
                             })
                           }
                           required
-                          style={{ borderRadius: "0 10px 10px 0" }}
+                          style={{
+                            borderRadius: "0 10px 10px 0",
+                            minHeight: "48px",
+                            fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                          }}
                         />
                       </div>
                     </div>
@@ -238,6 +270,9 @@ const SignupPage = () => {
                       <label
                         htmlFor="lastName"
                         className="form-label fw-semibold text-muted"
+                        style={{
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         Last Name
                       </label>
@@ -249,7 +284,7 @@ const SignupPage = () => {
                           type="text"
                           className="form-control border-start-0"
                           id="lastName"
-                          placeholder="Doe"
+                          placeholder="Al Najjar"
                           value={formData.lastName}
                           onChange={(e) =>
                             setFormData({
@@ -258,7 +293,11 @@ const SignupPage = () => {
                             })
                           }
                           required
-                          style={{ borderRadius: "0 10px 10px 0" }}
+                          style={{
+                            borderRadius: "0 10px 10px 0",
+                            minHeight: "48px",
+                            fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                          }}
                         />
                       </div>
                     </div>
@@ -269,6 +308,9 @@ const SignupPage = () => {
                     <label
                       htmlFor="email"
                       className="form-label fw-semibold text-muted"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                      }}
                     >
                       Email Address
                     </label>
@@ -280,13 +322,17 @@ const SignupPage = () => {
                         type="email"
                         className="form-control border-start-0"
                         id="email"
-                        placeholder="user@example.com"
+                        placeholder="ahmad@example.com"
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
                         required
-                        style={{ borderRadius: "0 10px 10px 0" }}
+                        style={{
+                          borderRadius: "0 10px 10px 0",
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       />
                     </div>
                   </div>
@@ -297,6 +343,9 @@ const SignupPage = () => {
                       <label
                         htmlFor="specialty"
                         className="form-label fw-semibold text-muted"
+                        style={{
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         Medical Specialty
                       </label>
@@ -311,7 +360,11 @@ const SignupPage = () => {
                           })
                         }
                         required
-                        style={{ borderRadius: "10px" }}
+                        style={{
+                          borderRadius: "10px",
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       >
                         <option value="">Select your specialty</option>
                         {specialties.map((specialty, index) => (
@@ -328,6 +381,9 @@ const SignupPage = () => {
                     <label
                       htmlFor="password"
                       className="form-label fw-semibold text-muted"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                      }}
                     >
                       Password
                     </label>
@@ -345,12 +401,19 @@ const SignupPage = () => {
                           setFormData({ ...formData, password: e.target.value })
                         }
                         required
+                        style={{
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       />
                       <button
                         type="button"
                         className="input-group-text bg-light border-start-0"
                         onClick={() => setShowPassword(!showPassword)}
-                        style={{ borderRadius: "0 10px 10px 0" }}
+                        style={{
+                          borderRadius: "0 10px 10px 0",
+                          minHeight: "48px",
+                        }}
                       >
                         {showPassword ? (
                           <FaEyeSlash className="text-muted" />
@@ -376,7 +439,12 @@ const SignupPage = () => {
                             )
                           )}
                         </div>
-                        <small className="text-muted">
+                        <small
+                          className="text-muted"
+                          style={{
+                            fontSize: "clamp(0.8rem, 1.8vw, 0.875rem)",
+                          }}
+                        >
                           Password strength:{" "}
                           {Object.values(passwordValidation).filter(Boolean)
                             .length === 5
@@ -395,6 +463,9 @@ const SignupPage = () => {
                     <label
                       htmlFor="confirmPassword"
                       className="form-label fw-semibold text-muted"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                      }}
                     >
                       Confirm Password
                     </label>
@@ -415,6 +486,10 @@ const SignupPage = () => {
                           })
                         }
                         required
+                        style={{
+                          minHeight: "48px",
+                          fontSize: "clamp(0.9rem, 2.2vw, 1rem)",
+                        }}
                       />
                       <button
                         type="button"
@@ -422,7 +497,10 @@ const SignupPage = () => {
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
-                        style={{ borderRadius: "0 10px 10px 0" }}
+                        style={{
+                          borderRadius: "0 10px 10px 0",
+                          minHeight: "48px",
+                        }}
                       >
                         {showConfirmPassword ? (
                           <FaEyeSlash className="text-muted" />
@@ -433,7 +511,12 @@ const SignupPage = () => {
                     </div>
                     {formData.confirmPassword &&
                       formData.password !== formData.confirmPassword && (
-                        <small className="text-danger">
+                        <small
+                          className="text-danger"
+                          style={{
+                            fontSize: "clamp(0.8rem, 1.8vw, 0.875rem)",
+                          }}
+                        >
                           Passwords do not match
                         </small>
                       )}
@@ -454,10 +537,17 @@ const SignupPage = () => {
                           })
                         }
                         required
+                        style={{
+                          minWidth: "20px",
+                          minHeight: "20px",
+                        }}
                       />
                       <label
                         className="form-check-label text-muted"
                         htmlFor="agreeTerms"
+                        style={{
+                          fontSize: "clamp(0.85rem, 2vw, 0.9rem)",
+                        }}
                       >
                         I agree to the{" "}
                         <a
@@ -483,11 +573,12 @@ const SignupPage = () => {
                     className="btn btn-primary w-100 py-3 mb-4 fw-semibold"
                     style={{
                       borderRadius: "10px",
-                      fontSize: "1.1rem",
+                      fontSize: "clamp(1rem, 2.5vw, 1.1rem)",
                       background: "linear-gradient(45deg, #2a7de1, #1e88e5)",
                       border: "none",
                       boxShadow: "0 4px 15px rgba(42, 125, 225, 0.3)",
                       transition: "all 0.3s ease",
+                      minHeight: "52px",
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.transform = "translateY(-2px)";
@@ -507,7 +598,9 @@ const SignupPage = () => {
                   <div className="text-center mb-4">
                     <span
                       className="bg-white px-3 text-muted"
-                      style={{ fontSize: "0.9rem" }}
+                      style={{
+                        fontSize: "clamp(0.8rem, 1.8vw, 0.9rem)",
+                      }}
                     >
                       or sign up with
                     </span>
@@ -520,7 +613,11 @@ const SignupPage = () => {
                       <button
                         type="button"
                         className="btn btn-outline-secondary w-100 py-2"
-                        style={{ borderRadius: "10px" }}
+                        style={{
+                          borderRadius: "10px",
+                          minHeight: "44px",
+                          fontSize: "clamp(0.85rem, 2vw, 0.9rem)",
+                        }}
                       >
                         <FaGoogle className="me-2" />
                         Google
@@ -530,7 +627,11 @@ const SignupPage = () => {
                       <button
                         type="button"
                         className="btn btn-outline-secondary w-100 py-2"
-                        style={{ borderRadius: "10px" }}
+                        style={{
+                          borderRadius: "10px",
+                          minHeight: "44px",
+                          fontSize: "clamp(0.85rem, 2vw, 0.9rem)",
+                        }}
                       >
                         <FaFacebook className="me-2" />
                         Facebook
@@ -540,7 +641,12 @@ const SignupPage = () => {
 
                   {/* Login Link */}
                   <div className="text-center">
-                    <p className="text-muted mb-0">
+                    <p
+                      className="text-muted mb-0"
+                      style={{
+                        fontSize: "clamp(0.85rem, 2vw, 0.9rem)",
+                      }}
+                    >
                       Already have an account?{" "}
                       <Link
                         to="/login"

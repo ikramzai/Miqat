@@ -73,7 +73,22 @@ const SearchDoctorsPage = () => {
 
   useEffect(() => {
     fetchDoctors();
-  }, []);
+
+    // Read URL parameters and set initial filters
+    const specialtyParam = searchParams.get("specialty");
+    const searchParam = searchParams.get("search");
+    const locationParam = searchParams.get("location");
+
+    if (specialtyParam || searchParam || locationParam) {
+      setFilters((prev) => ({
+        ...prev,
+        specialty: specialtyParam || "",
+        search: searchParam || "",
+        location: locationParam || "",
+      }));
+      setShowFilters(true); // Show filters when coming from specialty click
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     applyFilters();
@@ -154,6 +169,15 @@ const SearchDoctorsPage = () => {
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+
+    // Update URL parameters
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value) {
+      newSearchParams.set(key, value);
+    } else {
+      newSearchParams.delete(key);
+    }
+    setSearchParams(newSearchParams);
   };
 
   const handleSearch = () => {
@@ -164,13 +188,43 @@ const SearchDoctorsPage = () => {
   };
 
   const handleBookAppointment = (doctor) => {
+    // Check if user is logged in
+    const token = localStorage.getItem("token");
+    const userType = localStorage.getItem("userType");
+
+    if (!token) {
+      if (window.showToast) {
+        window.showToast(
+          "Please log in as a patient to book an appointment",
+          "warning"
+        );
+      }
+      // Store the intended booking destination
+      localStorage.setItem("redirectAfterLogin", `/booking/${doctor._id}`);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
+      return;
+    }
+
+    if (userType !== "patient") {
+      if (window.showToast) {
+        window.showToast("Only patients can book appointments", "warning");
+      }
+      return;
+    }
+
     if (window.showToast) {
       window.showToast(
-        `Redirecting to book appointment with Dr. ${doctor.name}`,
+        `Redirecting to book appointment with ${doctor.name}`,
         "info"
       );
     }
-    // Navigation will be handled by DoctorCard component
+
+    // Navigate to booking page
+    setTimeout(() => {
+      navigate(`/booking/${doctor._id}`);
+    }, 1000);
   };
 
   const clearAllFilters = () => {
@@ -181,6 +235,10 @@ const SearchDoctorsPage = () => {
       rating: "",
       availability: "",
     });
+
+    // Clear URL parameters
+    setSearchParams({});
+
     if (window.showToast) {
       window.showToast("Filters cleared", "info");
     }
@@ -201,10 +259,27 @@ const SearchDoctorsPage = () => {
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h1 className="text-primary fw-bold mb-2">Find a Doctor</h1>
+              <h1 className="text-primary fw-bold mb-2">
+                {filters.specialty
+                  ? `${filters.specialty} Specialists`
+                  : "Find a Doctor"}
+              </h1>
               <p className="text-muted mb-0">
-                Discover qualified healthcare professionals in your area
+                {filters.specialty
+                  ? `Discover qualified ${filters.specialty.toLowerCase()} specialists in your area`
+                  : "Discover qualified healthcare professionals in your area"}
               </p>
+              {filters.specialty && (
+                <div className="mt-2">
+                  <button
+                    className="btn btn-sm btn-outline-secondary"
+                    onClick={clearAllFilters}
+                  >
+                    <FaFilter className="me-1" />
+                    Clear Specialty Filter
+                  </button>
+                </div>
+              )}
             </div>
             <button
               className="btn btn-outline-primary"

@@ -74,9 +74,24 @@ const PatientDashboard = () => {
     };
 
     if (token && userType === "patient") {
-    fetchData();
+      fetchData();
     }
   }, [token, userType, navigate]);
+
+  // Listen for profile updates
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      if (event.detail && event.detail.userData) {
+        setUser(event.detail.userData);
+      }
+    };
+
+    window.addEventListener("profile-updated", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener("profile-updated", handleProfileUpdate);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -107,7 +122,7 @@ const PatientDashboard = () => {
   };
 
   const handleEditProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
   };
 
   if (loading) {
@@ -180,7 +195,10 @@ const PatientDashboard = () => {
               <h5 className="card-title">{user?.name}</h5>
               <p className="card-text text-muted mb-1">{user?.email}</p>
               <p className="card-text text-muted">{user?.phone || "N/A"}</p>
-              <button className="btn btn-primary mt-2" onClick={handleEditProfile}>
+              <button
+                className="btn btn-primary mt-2"
+                onClick={handleEditProfile}
+              >
                 Edit Profile
               </button>
             </div>
